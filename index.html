@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Unified Clinical Engine</title>
+    <title>HearLink AAC - Complete Unified Engine</title>
     <style>
         :root {
             --bg: #f8fafc;
@@ -14,11 +14,11 @@
             --primary-light: #e0f2fe;
             --urgent-color: #ef4444;
             
-            /* Fitzgerald Key Grammar Colors (For Pediatric Framework) */
+            /* Fitzgerald Key Grammar Colors (Pediatric System) */
             --fitz-social: #ffffff;
-            --fitz-verb: #dcfce7;      /* Light Green */
-            --fitz-descriptor: #e0f2fe;/* Light Blue */
-            --fitz-noun: #fef9c3;      /* Light Yellow */
+            --fitz-verb: #dcfce7;      
+            --fitz-descriptor: #e0f2fe;
+            --fitz-noun: #fef9c3;      
         }
 
         body {
@@ -50,7 +50,6 @@
         .header-left { display: flex; align-items: center; gap: 15px; }
         .brand { font-size: 1.3rem; font-weight: 900; color: var(--primary); }
 
-        /* Master Control Selector Toggles */
         .toggle-group { display: flex; background: #f1f5f9; padding: 3px; border-radius: 12px; border: 2px solid var(--border); }
         .toggle-btn {
             padding: 6px 14px; border: none; background: transparent; font-weight: 800;
@@ -164,11 +163,9 @@
     let activeItemsList = [];
     let currentPage = 1;
     let structuralSentence = [];
-    const itemsPerPage = 8; // Constant grid size limit to completely bypass visual crowding fatigue
+    const itemsPerPage = 8; 
 
-    // ==========================================
-    // DATA MATRIX: ADULT CLINICAL FRAMEWORK (CONTEXTUAL)
-    // ==========================================
+    // --- ADULT DATA MATRIX ---
     const adultCorpus = [
         { file: "Emergency_6338", hindi: "आपातकाल / एमरजेंसी", cat: "urgent" },
         { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat: "urgent" },
@@ -212,13 +209,10 @@
         home: { label: "घर पर", icon: "🏠" }
     };
 
-    // ==========================================
-    // DATA MATRIX: PEDIATRIC DEVELOPMENTAL FRAMEWORK (MAPPED VIA CORE/FRINGE FITZGERALD KEY)
-    // ==========================================
-    // Positions 1-4 are hard-assigned to Core elements to maintain pediatric motor planning
+    // --- CHILD DATA MATRIX ---
     const childCore = [
         { file: "Help_6241", hindi: "मदद", type: "social" },
-        { file: "Please give me_6394", hindi: "चाह चाहिए", type: "verb" },
+        { file: "Please give me_6394", hindi: "चाहिए", type: "verb" },
         { file: "More_6406", hindi: "और", type: "descriptor" },
         { file: "I am all done_6398", hindi: "खत्म", type: "social" }
     ];
@@ -270,7 +264,6 @@
     function renderSidebar() {
         const sidebar = document.getElementById('categorySidebar');
         sidebar.innerHTML = '';
-        
         const sourceLayout = (activePopulation === 'adult') ? adultCategories : childFringeCorpus;
         
         Object.keys(sourceLayout).forEach(key => {
@@ -303,9 +296,7 @@
                 activeItemsList = adultCorpus.filter(item => item.cat === currentCategory);
             }
         } else {
-            // Child core layout integration protocol
             if (searchText) {
-                // Look across fringe sub-arrays if text is present
                 let combinedFringe = [];
                 Object.keys(childFringeCorpus).forEach(k => {
                     combinedFringe = combinedFringe.concat(childFringeCorpus[k].items);
@@ -314,7 +305,6 @@
                     item.hindi.includes(searchText) || item.file.toLowerCase().includes(searchText)
                 );
             } else {
-                // If clean category state, load the target child group array
                 activeItemsList = childFringeCorpus[currentCategory].items;
             }
         }
@@ -324,12 +314,10 @@
     function renderGridDisplay() {
         const grid = document.getElementById('aacGrid');
         grid.innerHTML = '';
-        
         let displaySet = [];
 
         if (activePopulation === 'adult') {
             document.getElementById('paginationWrapper').style.display = 'flex';
-            
             const totalItems = activeItemsList.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
             if (currentPage > totalPages) currentPage = totalPages;
@@ -341,9 +329,7 @@
             document.getElementById('prevPageBtn').disabled = (currentPage === 1);
             document.getElementById('nextPageBtn').disabled = (currentPage === totalPages);
         } else {
-            // Child Execution: Force bypass pagination to secure motor plan configurations
             document.getElementById('paginationWrapper').style.display = 'none';
-            // Always inject core words into positions 1-4, then append fringe elements
             displaySet = [...childCore, ...activeItemsList.slice(0, 4)];
         }
 
@@ -351,7 +337,6 @@
             const card = document.createElement('div');
             card.className = 'aac-card';
             
-            // Apply Fitzgerald Color Scheme only if pediatric environment is activated
             if (activePopulation === 'child') {
                 if (item.type === 'social') card.style.backgroundColor = 'var(--fitz-social)';
                 if (item.type === 'verb') card.style.backgroundColor = 'var(--fitz-verb)';
@@ -424,34 +409,50 @@
         executeAcousticFeedback(fullPhrase);
     }
 
-    // --- STRATEGIC REGIONAL HINDI ACOUSTIC MODULATION PROFILES ---
+    // --- ENHANCED ASYNCHRONOUS DIALECT MATCHING SPEECH ENGINE ---
     function executeAcousticFeedback(phrase) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(phrase);
             
-            // Adjust pitch/rate dynamically based on population profile
-            if (activePopulation === 'adult') {
-                utterance.rate = 0.70;  // Measured processing speed for stroke recovery
-                utterance.pitch = 1.0; // Balanced adult voice profile
-            } else {
-                utterance.rate = 0.72;  // Deliberate pacing for language development feedback
-                utterance.pitch = 1.25; // Elevated pitch emulating parent-child speech prosody
-            }
-            
+            // Generate utterance block instance
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.text = phrase;
             utterance.volume = 1.0;
 
-            const voices = window.speechSynthesis.getVoices();
-            let nativeHindiVoice = voices.find(v => 
-                v.lang === 'hi-IN' || v.lang === 'hi_IN' || 
-                v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('hindi')
-            );
-
-            if (!nativeHindiVoice) {
-                nativeHindiVoice = voices.find(v => v.name.includes('Google हिन्दी'));
+            // Configure dynamic acoustic baseline vectors per therapeutic profile
+            if (activePopulation === 'adult') {
+                utterance.rate = 0.70;  // Measured clinical pacing for stroke processing
+                utterance.pitch = 1.0;  // Normal neutral adult tone range
+            } else {
+                utterance.rate = 0.72;  // Engaging developmental learning speed
+                utterance.pitch = 1.25; // Friendly child-directed pitch mapping
             }
 
-            if (nativeHindiVoice) utterance.voice = nativeHindiVoice;
+            // High-precision local dialect matching utility function
+            const findTrueHindiVoice = () => {
+                const voices = window.speechSynthesis.getVoices();
+                
+                // Priority 1: True regional Indian Hindi locale profiles
+                let voice = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN');
+                
+                // Priority 2: Native Google Indian translation wrappers
+                if (!voice) voice = voices.find(v => v.name.includes('Google हिन्दी'));
+                
+                // Priority 3: Alternative text-string metadata scans
+                if (!voice) {
+                    voice = voices.find(v => 
+                        v.name.toLowerCase().includes('hindi') || 
+                        v.name.toLowerCase().includes('india')
+                    );
+                }
+                return voice;
+            };
+
+            const targetVoice = findTrueHindiVoice();
+            if (targetVoice) {
+                utterance.voice = targetVoice;
+            }
+
             window.speechSynthesis.speak(utterance);
         }
     }
@@ -466,7 +467,6 @@
         filterDataCorpus();
     }
 
-    // Population Toggler Switch
     function setPopulation(pop) {
         activePopulation = pop;
         document.getElementById('pop-adult').classList.toggle('active', pop === 'adult');
@@ -476,7 +476,6 @@
         sub.textContent = (pop === 'adult') ? "Context AAC" : "Child Development";
         sub.style.color = (pop === 'adult') ? "#64748b" : "#eab308";
 
-        // Reset default root taxonomy folders based on population changes
         currentCategory = (pop === 'adult') ? 'urgent' : 'toys';
         currentPage = 1;
         document.getElementById('searchInput').value = '';
@@ -484,7 +483,6 @@
         initSystem();
     }
 
-    // Communication Level Mode Toggler Switch
     function setCommunicationTier(tier) {
         activeCommunicationTier = tier;
         document.getElementById('tier-basic').classList.toggle('active', tier === 'basic');
@@ -493,8 +491,15 @@
         clearSentence();
     }
 
+    // --- ANTI-LAG COUPLING HANDSHAKE MATRIX ---
+    // Forces the application to re-check voice buffers instantly as hardware engines change
     if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = initSystem;
+        speechSynthesis.onvoiceschanged = () => {
+            // Warm up voice caches silently to bypass browser wake lag
+            const warmUpUtterance = new SpeechSynthesisUtterance("");
+            window.speechSynthesis.speak(warmUpUtterance);
+            initSystem();
+        };
     }
     window.onload = initSystem;
 </script>
