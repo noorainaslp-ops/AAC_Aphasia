@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Complete Aphasia Contextual Engine</title>
+    <title>HearLink AAC - Unified Clinical Engine</title>
     <style>
         :root {
-            --primary: #0284c7;
-            --primary-light: #e0f2fe;
             --bg: #f8fafc;
             --text: #0f172a;
             --card-bg: #ffffff;
             --border: #cbd5e1;
+            --primary: #0284c7;
+            --primary-light: #e0f2fe;
             --urgent-color: #ef4444;
+            
+            /* Fitzgerald Key Grammar Colors (For Pediatric Framework) */
+            --fitz-social: #ffffff;
+            --fitz-verb: #dcfce7;      /* Light Green */
+            --fitz-descriptor: #e0f2fe;/* Light Blue */
+            --fitz-noun: #fef9c3;      /* Light Yellow */
         }
 
         body {
@@ -31,223 +37,106 @@
         header {
             background: var(--card-bg);
             border-bottom: 2px solid var(--border);
-            padding: 10px 20px;
+            padding: 5px 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
+            flex-direction: column;
+            gap: 8px;
             box-sizing: border-box;
         }
-
-        .brand { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
-
-        /* Unified Mode Selector */
-        .tier-toggle {
-            display: flex;
-            background: #f1f5f9;
-            padding: 4px;
-            border-radius: 12px;
-            border: 2px solid var(--border);
+        @media(min-width: 600px) {
+            header { flex-direction: row; justify-content: space-between; align-items: center; height: 75px; }
         }
 
-        .tier-btn {
-            padding: 8px 18px;
-            border: none;
-            background: transparent;
-            font-weight: 800;
-            font-size: 0.95rem;
-            border-radius: 8px;
-            cursor: pointer;
-            color: #64748b;
-            transition: all 0.2s;
-        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .brand { font-size: 1.3rem; font-weight: 900; color: var(--primary); }
 
-        .tier-btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        /* Master Control Selector Toggles */
+        .toggle-group { display: flex; background: #f1f5f9; padding: 3px; border-radius: 12px; border: 2px solid var(--border); }
+        .toggle-btn {
+            padding: 6px 14px; border: none; background: transparent; font-weight: 800;
+            font-size: 0.9rem; border-radius: 8px; cursor: pointer; color: #64748b; transition: all 0.15s;
         }
+        .toggle-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        #pop-adult.active { background: #0284c7; }
+        #pop-child.active { background: #eab308; }
 
-        .search-container {
-            padding: 10px 20px;
-            background: var(--card-bg);
-            border-bottom: 2px solid var(--border);
-        }
+        .search-container { padding: 8px 20px; background: var(--card-bg); border-bottom: 2px solid var(--border); }
         .search-input {
-            width: 100%;
-            padding: 12px;
-            border: 3px solid var(--border);
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            box-sizing: border-box;
+            width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 10px;
+            font-size: 1rem; font-weight: 700; box-sizing: border-box;
         }
         .search-input:focus { border-color: var(--primary); outline: none; }
 
         #sentenceBar {
-            background: var(--card-bg);
-            border-bottom: 2px solid var(--border);
-            padding: 12px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            min-height: 80px;
-            box-sizing: border-box;
+            background: var(--card-bg); border-bottom: 2px solid var(--border); padding: 10px 20px;
+            display: flex; gap: 12px; align-items: center; min-height: 75px; box-sizing: border-box;
         }
-
         .sentence-display {
-            flex: 1;
-            background: var(--bg);
-            border: 3px dashed var(--border);
-            border-radius: 14px;
-            min-height: 55px;
-            display: flex;
-            align-items: center;
-            padding: 5px 15px;
-            gap: 10px;
-            overflow-x: auto;
+            flex: 1; background: var(--bg); border: 2px dashed var(--border); border-radius: 14px;
+            min-height: 50px; display: flex; align-items: center; padding: 4px 12px; gap: 8px; overflow-x: auto;
         }
-
         .phrase-chip {
-            background: var(--primary-light);
-            color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: var(--primary-light); color: var(--primary); padding: 6px 12px;
+            border-radius: 8px; font-weight: 800; font-size: 1rem; display: flex; align-items: center; gap: 6px;
         }
-
         .phrase-chip .remove-x { cursor: pointer; font-weight: 900; color: #38bdf8; }
-
+        
         .action-btn {
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 0 24px;
-            border-radius: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            font-size: 1.1rem;
-            height: 55px;
+            background: #10b981; color: white; border: none; padding: 0 20px;
+            border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 1rem; height: 50px;
         }
         .clear-btn { background: #64748b; }
 
         .workspace { display: flex; flex: 1; overflow: hidden; }
 
         .sidebar {
-            width: 160px;
-            background: var(--card-bg);
-            border-right: 2px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 15px 8px;
-            overflow-y: auto;
+            width: 150px; background: var(--card-bg); border-right: 2px solid var(--border);
+            display: flex; flex-direction: column; gap: 8px; padding: 12px 6px; overflow-y: auto;
         }
-
         .cat-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 4px;
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            background: #f8fafc;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 800;
-            color: #475569;
-            gap: 6px;
-            transition: all 0.15s ease;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 10px 4px; border: 2px solid var(--border); border-radius: 14px; background: #f8fafc;
+            cursor: pointer; font-size: 0.9rem; font-weight: 800; color: #475569; gap: 4px;
         }
+        .cat-btn.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+        #cat-urgent.active { background: #fee2e2; border-color: var(--urgent-color); color: var(--urgent-color); }
 
-        .cat-btn.active {
-            background: var(--primary-light);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        
-        #cat-urgent.active {
-            background: #fee2e2;
-            border-color: var(--urgent-color);
-            color: var(--urgent-color);
-        }
-
-        .grid-container { 
-            flex: 1; 
-            padding: 20px; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-        }
-        
-        .aac-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-            gap: 20px; 
-        }
+        .grid-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; justify-content: space-between; }
+        .aac-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 15px; flex: 1; max-height: 480px; }
 
         .aac-card {
-            background: var(--card-bg);
-            border: 3px solid var(--border);
-            border-radius: 24px;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            aspect-ratio: 1 / 1;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
-            text-align: center;
-            box-sizing: border-box;
-            transition: transform 0.1s ease, border-color 0.1s ease;
+            background: var(--card-bg); border: 3px solid var(--border); border-radius: 20px; padding: 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            aspect-ratio: 1 / 1; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.01); text-align: center; box-sizing: border-box;
         }
-        .aac-card:active { transform: scale(0.96); border-color: var(--primary); }
+        .aac-card:active { transform: scale(0.95); }
+        .aac-image { width: 70%; height: 70%; object-fit: contain; pointer-events: none; }
+        .aac-label { font-size: 1.1rem; font-weight: 900; line-height: 1.2; margin-top: 4px; }
 
-        .aac-image { width: 75%; height: 75%; object-fit: contain; pointer-events: none; }
-        .aac-label { font-size: 1.15rem; font-weight: 900; color: var(--text); margin-top: 6px; line-height: 1.2; }
-
-        .pagination-bar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 25px;
-            margin-top: 20px;
-            padding-top: 10px;
-            border-top: 2px solid #e2e8f0;
-        }
-        .page-btn {
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 1rem;
-            cursor: pointer;
-        }
+        .pagination-bar { display: flex; justify-content: center; align-items: center; gap: 20px; padding-top: 10px; border-top: 2px solid #e2e8f0; }
+        .page-btn { background: var(--card-bg); border: 2px solid var(--border); padding: 10px 20px; border-radius: 10px; font-weight: 800; cursor: pointer; }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-        .page-info { font-weight: 800; color: #475569; font-size: 1.1rem; }
+        .page-info { font-weight: 800; color: #475569; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand">HearLink <span style="color: #64748b; font-weight: 400;">Context AAC</span></div>
-        <div class="tier-toggle">
-            <button id="btnBasic" class="tier-btn active" onclick="setMode('basic')">सरल मोड</button>
-            <button id="btnAdvanced" class="tier-btn" onclick="setMode('advanced')">बातचीत मोड</button>
+        <div class="header-left">
+            <div class="brand">HearLink <span id="brandSub" style="font-weight:400; color:#64748b;">Context AAC</span></div>
+            <div class="toggle-group">
+                <button id="pop-adult" class="toggle-btn active" onclick="setPopulation('adult')">वयस्क (Adult)</button>
+                <button id="pop-child" class="toggle-btn" onclick="setPopulation('child')">बच्चे (Child)</button>
+            </div>
+        </div>
+        <div class="toggle-group">
+            <button id="tier-basic" class="toggle-btn active" onclick="setCommunicationTier('basic')">सरल मोड</button>
+            <button id="tier-advanced" class="toggle-btn" onclick="setCommunicationTier('advanced')">बातचीत मोड</button>
         </div>
     </header>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="शब्द खोजें... (Search across context layouts)" oninput="handleSearch()">
+    <div class="search-container" id="searchWrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="शब्द खोजें... (Search layout items)" oninput="handleSearch()">
     </div>
 
     <div id="sentenceBar" style="display: none;">
@@ -260,7 +149,7 @@
         <div class="sidebar" id="categorySidebar"></div>
         <div class="grid-container">
             <div class="aac-grid" id="aacGrid"></div>
-            <div class="pagination-bar" id="paginationBar">
+            <div class="pagination-bar" id="paginationWrapper">
                 <button class="page-btn" id="prevPageBtn" onclick="changePage(-1)">पिछला</button>
                 <span class="page-info" id="pageInfo">पेज 1 of 1</span>
                 <button class="page-btn" id="nextPageBtn" onclick="changePage(1)">अगला</button>
@@ -269,16 +158,18 @@
     </div>
 
 <script>
-    let currentMode = 'basic'; 
+    let activePopulation = 'adult'; 
+    let activeCommunicationTier = 'basic'; 
     let currentCategory = 'urgent'; 
     let activeItemsList = [];
     let currentPage = 1;
     let structuralSentence = [];
-    const itemsPerPage = 8; // Mitigates focal field visual neglect and search errors
+    const itemsPerPage = 8; // Constant grid size limit to completely bypass visual crowding fatigue
 
-    // --- STRATEGIC CONTEXTUAL CORPUS MATRIX PARSED DIRECTLY FROM YOUR FILE ---
-    const fullCorpusRaw = [
-        // Context 1: Urgent Needs & Pain (🚨)
+    // ==========================================
+    // DATA MATRIX: ADULT CLINICAL FRAMEWORK (CONTEXTUAL)
+    // ==========================================
+    const adultCorpus = [
         { file: "Emergency_6338", hindi: "आपातकाल / एमरजेंसी", cat: "urgent" },
         { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat: "urgent" },
         { file: "I am hurt_6340", hindi: "मुझे चोट लगी है", cat: "urgent" },
@@ -287,107 +178,103 @@
         { file: "Help_6241", hindi: "मदद चाहिए", cat: "urgent" },
         { file: "I need a break_6397", hindi: "मुझे आराम चाहिए", cat: "urgent" },
         { file: "I want to be alone_6407", hindi: "मुझे अकेला छोड़ दें", cat: "urgent" },
-
-        // Context 2: At the Dining Table / Meals (🍽️)
         { file: "Water_6707", hindi: "पानी", cat: "dining" },
-        { file: "Water bottle_7009", hindi: "पानी की बोतल", cat: "dining" },
         { file: "Tea_6728", hindi: "चाय", cat: "dining" },
         { file: "Milk_6708", hindi: "दूध", cat: "dining" },
         { file: "Roti_6565", hindi: "रोटी", cat: "dining" },
         { file: "Rice_6567", hindi: "चावल", cat: "dining" },
         { file: "Dal_6568", hindi: "दाल", cat: "dining" },
         { file: "Sabzi_6566", hindi: "सब्ज़ी", cat: "dining" },
-        { file: "Aaloo Poori_6523", hindi: "आलू पूरी", cat: "dining" },
-        { file: "Paratha_6530", hindi: "पराठा", cat: "dining" },
-        { file: "Sweets_6259", hindi: "मिठाई", cat: "dining" },
         { file: "Plate_6741", hindi: "थाली", cat: "dining" },
-        { file: "Spoon_6742", hindi: "चम्मच", cat: "dining" },
-
-        // Context 3: Daily Routine & Personal Care (🧼)
         { file: "Toilet_6247", hindi: "शौचालय जाना है", cat: "care" },
         { file: "Bathing_6248", hindi: "नहाना है", cat: "care" },
-        { file: "Comb hair_6461", hindi: "कंघा करना", cat: "care" },
-        { file: "Blow nose_6464", hindi: "नाक साफ करना", cat: "care" },
-        { file: "Shampoo_6466", hindi: "शैम्पू", cat: "care" },
-        { file: "Soap_6465", hindi: "साबुन", cat: "care" },
-        { file: "Cut nails_6463", hindi: "नाखून काटना", cat: "care" },
         { file: "Sleep_6251", hindi: "सोना है", cat: "care" },
-
-        // Context 4: Social Interactions & Greetings (💬)
         { file: "Hello_6361", hindi: "नमस्ते", cat: "social" },
         { file: "Thank you_6392", hindi: "धन्यवाद", cat: "social" },
         { file: "Please_6391", hindi: "कृपया", cat: "social" },
         { file: "Bye_6362", hindi: "अलविदा", cat: "social" },
-        { file: "I am sorry_7277", hindi: "क्षमा करें", cat: "social" },
-        { file: "You are welcome_6393", hindi: "आपका स्वागत है", cat: "social" },
-        { file: "Excuse me_6399", hindi: "सुनिए", cat: "social" },
-        { file: "Quiet please!_7286", hindi: "शांत रहें", cat: "social" },
-
-        // Context 5: Medical Settings & Therapy (🏥)
         { file: "Doctor_6307", hindi: "डॉक्टर", cat: "therapy" },
         { file: "Nurse_6308", hindi: "नर्स", cat: "therapy" },
         { file: "Medicine_6343", hindi: "दवा लेनी है", cat: "therapy" },
-        { file: "Bandage_6344", hindi: "पट्टी (Bandage)", cat: "therapy" },
         { file: "Speech therapy_6488", hindi: "स्पीच थेरेपी", cat: "therapy" },
-        { file: "Exercises_6479", hindi: "व्यायाम / कसरत", cat: "therapy" },
-        { file: "Leg exercises_6486", hindi: "पैरों की कसरत", cat: "therapy" },
-        { file: "Hospital_6325", hindi: "अस्पताल", cat: "therapy" },
-
-        // Context 6: Home Objects & Comfort Controls (🏠)
-        { file: "Air conditioner_6477", hindi: "एसी (AC) चलाएं", cat: "home" },
+        { file: "Air conditioner_6477", hindi: "एसी चलाएं", cat: "home" },
         { file: "Fan_7025", hindi: "पंखा चलाएं", cat: "home" },
-        { file: "Light_6470", hindi: "लाइट ऑन/ऑफ", cat: "home" },
-        { file: "Sofa_7042", hindi: "सोफे पर बैठना है", cat: "home" },
-        { file: "Bed_6472", hindi: "बिस्तर पर जाना है", cat: "home" },
-        { file: "Pillows_6473", hindi: "तकिया चाहिए", cat: "home" },
-        { file: "Blanket_6474", hindi: "कंबल चाहिए", cat: "home" },
-        { file: "Window_7023", hindi: "खिड़की खोलें/बंद करें", cat: "home" },
-        { file: "Door_7024", hindi: "दरवाजा खोलें", cat: "home" },
-        { file: "Television_7040", hindi: "टीवी (TV) देखना है", cat: "home" },
-
-        // Context 7: My Personal Status / Moods (🧠)
-        { file: "Happy_6374", hindi: "मैं खुश हूँ", cat: "status" },
-        { file: "Sad_6375", hindi: "मैं उदास हूँ", cat: "status" },
-        { file: "Angry_6376", hindi: "मैं नाराज़ हूँ", cat: "status" },
-        { file: "Worried_6384", hindi: "मैं चिंतित हूँ", cat: "status" },
-        { file: "Tired_6386", hindi: "मैं थक गया हूँ", cat: "status" },
-        { file: "Sick_6389", hindi: "मैं बीमार हूँ", cat: "status" },
-        { file: "Confused_6380", hindi: "मैं उलझन में हूँ", cat: "status" },
-        { file: "Hot_6387", hindi: "गर्मी लग रही है", cat: "status" },
-        { file: "Cold_6388", hindi: "ठंड लग रही है", cat: "status" },
-
-        // Context 8: Leisure & Activity Layouts (🧩)
-        { file: "Book_7170", hindi: "किताब पढ़नी है", cat: "leisure" },
-        { file: "Story book_7173", hindi: "कहानी की किताब", cat: "leisure" },
-        { file: "Write_6856", hindi: "लिखना है", cat: "leisure" },
-        { file: "Draw_6853", hindi: "चित्र बनाना है", cat: "leisure" },
-        { file: "Puzzle_6771", hindi: "पहेली खेलनी है", cat: "leisure" },
-        { file: "Chess_7282", hindi: "शतरंज खेलना है", cat: "leisure" },
-        { file: "Walk_7122", hindi: "टहलने जाना है", cat: "leisure" },
-        { file: "Park_6321", hindi: "पार्क जाना है", cat: "leisure" }
+        { file: "Light_6470", hindi: "लाइट", cat: "home" },
+        { file: "Television_7040", hindi: "टी वी देखना है", cat: "home" }
     ];
 
-    const situationalCategories = {
+    const adultCategories = {
         urgent: { label: "ज़रूरी / दर्द", icon: "🚨" },
         dining: { label: "भोजन समय", icon: "🍽️" },
         care: { label: "दिनचर्या", icon: "🧼" },
         social: { label: "बातचीत", icon: "💬" },
         therapy: { label: "चिकित्सा", icon: "🏥" },
-        home: { label: "घर पर", icon: "🏠" },
-        status: { label: "मेरी स्थिति", icon: "🧠" },
-        leisure: { label: "मनोरंजन", icon: "🧩" }
+        home: { label: "घर पर", icon: "🏠" }
     };
 
-    function initAAC() {
+    // ==========================================
+    // DATA MATRIX: PEDIATRIC DEVELOPMENTAL FRAMEWORK (MAPPED VIA CORE/FRINGE FITZGERALD KEY)
+    // ==========================================
+    // Positions 1-4 are hard-assigned to Core elements to maintain pediatric motor planning
+    const childCore = [
+        { file: "Help_6241", hindi: "मदद", type: "social" },
+        { file: "Please give me_6394", hindi: "चाह चाहिए", type: "verb" },
+        { file: "More_6406", hindi: "और", type: "descriptor" },
+        { file: "I am all done_6398", hindi: "खत्म", type: "social" }
+    ];
+
+    const childFringeCorpus = {
+        toys: {
+            label: "खिलौने", icon: "🧸",
+            items: [
+                { file: "Doll_6778", hindi: "गुड़िया", type: "noun" },
+                { file: "Car_7053", hindi: "गाड़ी", type: "noun" },
+                { file: "Blocks_6773", hindi: "ब्लॉक", type: "noun" },
+                { file: "Puzzle_6771", hindi: "पहेली", type: "noun" }
+            ]
+        },
+        food: {
+            label: "खाना", icon: "🍎",
+            items: [
+                { file: "Water_6707", hindi: "पानी", type: "noun" },
+                { file: "Milk_6708", hindi: "दूध", type: "noun" },
+                { file: "Apple_6683", hindi: "सेब", type: "noun" },
+                { file: "Biscuits_6653", hindi: "बिस्कुट", type: "noun" }
+            ]
+        },
+        play: {
+            label: "क्रियाएं", icon: "🏃",
+            items: [
+                { file: "Play with me_6784", hindi: "खेलना", type: "verb" },
+                { file: "Walk_7122", hindi: "चलना", type: "verb" },
+                { file: "Sleep_6251", hindi: "सोना", type: "verb" },
+                { file: "Eat with small bites_6505", hindi: "खाना", type: "verb" }
+            ]
+        },
+        feelings: {
+            label: "भावनाएं", icon: "😄",
+            items: [
+                { file: "Happy_6374", hindi: "अच्छा / खुश", type: "descriptor" },
+                { file: "Sad_6375", hindi: "उदास", type: "descriptor" },
+                { file: "Angry_6376", hindi: "नाराज़", type: "descriptor" },
+                { file: "Sick_6389", hindi: "बीमार", type: "descriptor" }
+            ]
+        }
+    };
+
+    function initSystem() {
         renderSidebar();
-        filterCorpus();
+        filterDataCorpus();
     }
 
     function renderSidebar() {
         const sidebar = document.getElementById('categorySidebar');
         sidebar.innerHTML = '';
-        Object.keys(situationalCategories).forEach(key => {
-            const cat = situationalCategories[key];
+        
+        const sourceLayout = (activePopulation === 'adult') ? adultCategories : childFringeCorpus;
+        
+        Object.keys(sourceLayout).forEach(key => {
+            const cat = sourceLayout[key];
             const btn = document.createElement('button');
             btn.className = `cat-btn ${currentCategory === key ? 'active' : ''}`;
             btn.id = `cat-${key}`;
@@ -397,46 +284,83 @@
                 btn.classList.add('active');
                 document.getElementById('searchInput').value = '';
                 currentPage = 1;
-                filterCorpus();
+                filterDataCorpus();
             };
-            btn.innerHTML = `<span>${cat.icon}</span><span>${cat.label}</span>`;
+            btn.innerHTML = `<span style="font-size:1.4rem;">${cat.icon}</span><span>${cat.label}</span>`;
             sidebar.appendChild(btn);
         });
     }
 
-    function filterCorpus() {
+    function filterDataCorpus() {
         const searchText = document.getElementById('searchInput').value.trim().toLowerCase();
-        
-        if (searchText) {
-            activeItemsList = fullCorpusRaw.filter(item => 
-                item.hindi.includes(searchText) || 
-                item.file.toLowerCase().includes(searchText)
-            );
+
+        if (activePopulation === 'adult') {
+            if (searchText) {
+                activeItemsList = adultCorpus.filter(item => 
+                    item.hindi.includes(searchText) || item.file.toLowerCase().includes(searchText)
+                );
+            } else {
+                activeItemsList = adultCorpus.filter(item => item.cat === currentCategory);
+            }
         } else {
-            activeItemsList = fullCorpusRaw.filter(item => item.cat === currentCategory);
+            // Child core layout integration protocol
+            if (searchText) {
+                // Look across fringe sub-arrays if text is present
+                let combinedFringe = [];
+                Object.keys(childFringeCorpus).forEach(k => {
+                    combinedFringe = combinedFringe.concat(childFringeCorpus[k].items);
+                });
+                activeItemsList = combinedFringe.filter(item => 
+                    item.hindi.includes(searchText) || item.file.toLowerCase().includes(searchText)
+                );
+            } else {
+                // If clean category state, load the target child group array
+                activeItemsList = childFringeCorpus[currentCategory].items;
+            }
         }
-        
-        renderGrid();
+        renderGridDisplay();
     }
 
-    function renderGrid() {
+    function renderGridDisplay() {
         const grid = document.getElementById('aacGrid');
         grid.innerHTML = '';
-
-        const totalItems = activeItemsList.length;
-        const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
         
-        if (currentPage > totalPages) currentPage = totalPages;
+        let displaySet = [];
 
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-        
-        const pageItems = activeItemsList.slice(startIndex, endIndex);
+        if (activePopulation === 'adult') {
+            document.getElementById('paginationWrapper').style.display = 'flex';
+            
+            const totalItems = activeItemsList.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
 
-        pageItems.forEach(item => {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            displaySet = activeItemsList.slice(startIndex, startIndex + itemsPerPage);
+
+            document.getElementById('pageInfo').textContent = `पेज ${currentPage} of ${totalPages}`;
+            document.getElementById('prevPageBtn').disabled = (currentPage === 1);
+            document.getElementById('nextPageBtn').disabled = (currentPage === totalPages);
+        } else {
+            // Child Execution: Force bypass pagination to secure motor plan configurations
+            document.getElementById('paginationWrapper').style.display = 'none';
+            // Always inject core words into positions 1-4, then append fringe elements
+            displaySet = [...childCore, ...activeItemsList.slice(0, 4)];
+        }
+
+        displaySet.forEach(item => {
             const card = document.createElement('div');
             card.className = 'aac-card';
             
+            // Apply Fitzgerald Color Scheme only if pediatric environment is activated
+            if (activePopulation === 'child') {
+                if (item.type === 'social') card.style.backgroundColor = 'var(--fitz-social)';
+                if (item.type === 'verb') card.style.backgroundColor = 'var(--fitz-verb)';
+                if (item.type === 'descriptor') card.style.backgroundColor = 'var(--fitz-descriptor)';
+                if (item.type === 'noun') card.style.backgroundColor = 'var(--fitz-noun)';
+            } else {
+                card.style.backgroundColor = 'var(--card-bg)';
+            }
+
             const folderPrefix = "idc_symbols";
             const encodedFile = encodeURIComponent(item.file.trim());
             const imageSrc = `./${folderPrefix}/${encodedFile}.svg`;
@@ -448,42 +372,25 @@
             `;
             grid.appendChild(card);
         });
-
-        document.getElementById('pageInfo').textContent = `पेज ${currentPage} of ${totalPages}`;
-        document.getElementById('prevPageBtn').disabled = (currentPage === 1);
-        document.getElementById('nextPageBtn').disabled = (currentPage === totalPages);
     }
 
     function handleImgError(imgElement) {
         imgElement.style.display = 'none';
         const fallback = document.createElement('div');
-        fallback.style.fontSize = '2.5rem';
-        fallback.style.fontWeight = '800';
+        fallback.style.fontSize = '2.3rem';
         fallback.style.color = '#cbd5e1';
-        fallback.style.height = '75%';
+        fallback.style.height = '70%';
         fallback.style.display = 'flex';
         fallback.style.alignItems = 'center';
         fallback.style.justifyContent = 'center';
-        fallback.textContent = '🖼️';
+        fallback.textContent = (activePopulation === 'adult') ? '🖼️' : '🎨';
         imgElement.parentNode.insertBefore(fallback, imgElement);
     }
 
-    function changePage(direction) {
-        currentPage += direction;
-        renderGrid();
-    }
-
-    function handleSearch() {
-        currentPage = 1;
-        filterCorpus();
-    }
-
     function handleCardClick(hindiWord) {
-        if (currentMode === 'basic') {
-            // Simple Mode execution pipeline
-            executeSpeech(hindiWord);
+        if (activeCommunicationTier === 'basic') {
+            executeAcousticFeedback(hindiWord);
         } else {
-            // Sentence parsing pipeline
             structuralSentence.push(hindiWord);
             renderSentenceDisplay();
         }
@@ -514,55 +421,82 @@
     function speakSentence() {
         if (structuralSentence.length === 0) return;
         const fullPhrase = structuralSentence.join(' ');
-        executeSpeech(fullPhrase);
+        executeAcousticFeedback(fullPhrase);
     }
 
-    // --- INTEGRATED NATIVE INDIAN REGIONAL HINDI ACCENT MATRIX ---
-    function executeSpeech(phrase) {
+    // --- STRATEGIC REGIONAL HINDI ACOUSTIC MODULATION PROFILES ---
+    function executeAcousticFeedback(phrase) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(phrase);
             
-            // Clinical vocal decay processing parameters
-            utterance.rate = 0.76;  
-            utterance.pitch = 1.0;   
-            utterance.volume = 1.0;  
+            // Adjust pitch/rate dynamically based on population profile
+            if (activePopulation === 'adult') {
+                utterance.rate = 0.70;  // Measured processing speed for stroke recovery
+                utterance.pitch = 1.0; // Balanced adult voice profile
+            } else {
+                utterance.rate = 0.72;  // Deliberate pacing for language development feedback
+                utterance.pitch = 1.25; // Elevated pitch emulating parent-child speech prosody
+            }
+            
+            utterance.volume = 1.0;
 
             const voices = window.speechSynthesis.getVoices();
-            
-            // Hard filtering for genuine 'hi-IN' localization profiles
             let nativeHindiVoice = voices.find(v => 
-                v.lang === 'hi-IN' || 
-                v.lang === 'hi_IN' || 
-                v.name.toLowerCase().includes('india') || 
-                v.name.toLowerCase().includes('hindi')
+                v.lang === 'hi-IN' || v.lang === 'hi_IN' || 
+                v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('hindi')
             );
 
-            // Google system wrapper asset validation fallback
             if (!nativeHindiVoice) {
                 nativeHindiVoice = voices.find(v => v.name.includes('Google हिन्दी'));
             }
 
-            if (nativeHindiVoice) {
-                utterance.voice = nativeHindiVoice;
-            }
-            
+            if (nativeHindiVoice) utterance.voice = nativeHindiVoice;
             window.speechSynthesis.speak(utterance);
         }
     }
 
-    function setMode(mode) {
-        currentMode = mode;
-        document.getElementById('btnBasic').classList.toggle('active', mode === 'basic');
-        document.getElementById('btnAdvanced').classList.toggle('active', mode === 'advanced');
-        document.getElementById('sentenceBar').style.display = (mode === 'advanced') ? 'flex' : 'none';
+    function changePage(direction) {
+        currentPage += direction;
+        renderGridDisplay();
+    }
+
+    function handleSearch() {
+        currentPage = 1;
+        filterDataCorpus();
+    }
+
+    // Population Toggler Switch
+    function setPopulation(pop) {
+        activePopulation = pop;
+        document.getElementById('pop-adult').classList.toggle('active', pop === 'adult');
+        document.getElementById('pop-child').classList.toggle('active', pop === 'child');
+        
+        const sub = document.getElementById('brandSub');
+        sub.textContent = (pop === 'adult') ? "Context AAC" : "Child Development";
+        sub.style.color = (pop === 'adult') ? "#64748b" : "#eab308";
+
+        // Reset default root taxonomy folders based on population changes
+        currentCategory = (pop === 'adult') ? 'urgent' : 'toys';
+        currentPage = 1;
+        document.getElementById('searchInput').value = '';
+        
+        initSystem();
+    }
+
+    // Communication Level Mode Toggler Switch
+    function setCommunicationTier(tier) {
+        activeCommunicationTier = tier;
+        document.getElementById('tier-basic').classList.toggle('active', tier === 'basic');
+        document.getElementById('tier-advanced').classList.toggle('active', tier === 'advanced');
+        document.getElementById('sentenceBar').style.display = (tier === 'advanced') ? 'flex' : 'none';
         clearSentence();
     }
 
     if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = initAAC;
+        speechSynthesis.onvoiceschanged = initSystem;
     }
-    window.onload = initAAC;
+    window.onload = initSystem;
 </script>
 </body>
 </html>
