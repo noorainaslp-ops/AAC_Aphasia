@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Complete 1000+ Corpus Engine</title>
+    <title>HearLink AAC - Dual Mode Engine</title>
     <style>
         :root {
             --primary: #0284c7;
@@ -40,6 +40,33 @@
 
         .brand { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
 
+        /* Mode Selector Styling */
+        .tier-toggle {
+            display: flex;
+            background: var(--bg);
+            padding: 4px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+        }
+
+        .tier-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            font-weight: 800;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .tier-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
         .search-container {
             padding: 12px 20px;
             background: var(--card-bg);
@@ -65,6 +92,7 @@
             align-items: center;
             min-height: 80px;
             box-sizing: border-box;
+            transition: all 0.2s ease;
         }
 
         .sentence-display {
@@ -181,7 +209,6 @@
         .aac-image { width: 75%; height: 75%; object-fit: contain; pointer-events: none; }
         .aac-label { font-size: 1.05rem; font-weight: 800; color: var(--text); margin-top: 6px; line-height: 1.2; }
 
-        /* Pagination Control bar */
         .pagination-bar {
             display: flex;
             justify-content: center;
@@ -206,14 +233,18 @@
 <body>
 
     <header>
-        <div class="brand">HearLink <span style="color: #64748b; font-weight: 400;">AAC Corpus</span></div>
+        <div class="brand">HearLink <span style="color: #64748b; font-weight: 400;">AAC</span></div>
+        <div class="tier-toggle">
+            <button id="btnBasic" class="tier-btn active" onclick="setMode('basic')">सरल मोड</button>
+            <button id="btnAdvanced" class="tier-btn" onclick="setMode('advanced')">बातचीत मोड</button>
+        </div>
     </header>
 
     <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="पूरे 1000+ सिम्बल्स में खोजें... (Search all symbols by name or Hindi)" oninput="handleSearch()">
+        <input type="text" id="searchInput" class="search-input" placeholder="सिम्बल्स में खोजें... (Search symbols)" oninput="handleSearch()">
     </div>
 
-    <div id="sentenceBar">
+    <div id="sentenceBar" style="display: none;">
         <button class="action-btn clear-btn" onclick="clearSentence()">हटाएं</button>
         <div id="sentenceDisplay" class="sentence-display"></div>
         <button class="action-btn" onclick="speakSentence()">🗣️ वाक्य बोलें</button>
@@ -232,7 +263,13 @@
     </div>
 
 <script>
-    // --- MASSIVE INJECTED JELLOW CORPUS DATASET (ALL 1000+ SYMBOLS COMPILING) ---
+    let currentMode = 'basic'; // Defaulting to immediate single symbol response frame
+    let currentCategory = 'common';
+    let activeItemsList = [];
+    let currentPage = 1;
+    let structuralSentence = [];
+    const itemsPerPage = 12;
+
     const fullCorpusRaw = [
         { file: "Aaloo Poori_6523", hindi: "आलू पूरी", cat: "food" },
         { file: "About Me_6313", hindi: "मेरे बारे में", cat: "common" },
@@ -299,7 +336,7 @@
         { file: "Brown_6963", hindi: "भूरा", cat: "common" },
         { file: "Buffalo_6887", hindi: "भैंस", cat: "animals" },
         { file: "Bus_7051", hindi: "बस", cat: "transport" },
-        { file: "Butter_6748", hindi: "मक्खन", cat: "food" },
+        { file: "Butter_6748", hindi: "مक्खन", cat: "food" },
         { file: "Bye_6362", hindi: "बाय-बाय", cat: "common" },
         { file: "Cake_6626", hindi: "केक", cat: "food" },
         { file: "Cap_6439", hindi: "टोपी", cat: "daily" },
@@ -414,7 +451,7 @@
         { file: "Lunch-Dinner_6257", hindi: "दोपहर/रात का खाना", cat: "daily" },
         { file: "Mall_6316", hindi: "मॉल (Mall)", cat: "places" },
         { file: "Mango_6686", hindi: "आम", cat: "food" },
-        { file: "March_7200", hindi: "मार्च", cat: "time" },
+        { file: "March_7200", hindi: "मारर्च", cat: "time" },
         { file: "May_7202", hindi: "मई", cat: "time" },
         { file: "Medicine_6343", hindi: "दवा", cat: "medical" },
         { file: "Medu wada_6531", hindi: "मेदु वड़ा", cat: "food" },
@@ -534,7 +571,6 @@
         { file: "Zoo_6329", hindi: "चिड़ियाघर", cat: "places" }
     ];
 
-    // Sidebar Category Configurations
     const categories = {
         common: { label: "बातचीत", icon: "💬" },
         feelings: { label: "भावनाएं", icon: "😊" },
@@ -550,11 +586,6 @@
         animals: { label: "जीव-जंतु", icon: "🦁" },
         fun: { label: "मनोरंजन", icon: "🎨" }
     };
-
-    let currentCategory = 'common';
-    let activeItemsList = [];
-    let currentPage = 1;
-    const itemsPerPage = 12; // Clinical boundary limit to mitigate processing decay
 
     function initAAC() {
         renderSidebar();
@@ -586,13 +617,11 @@
         const searchText = document.getElementById('searchInput').value.trim().toLowerCase();
         
         if (searchText) {
-            // Global cross-corpus matching
             activeItemsList = fullCorpusRaw.filter(item => 
                 item.hindi.includes(searchText) || 
                 item.file.toLowerCase().includes(searchText)
             );
         } else {
-            // Filter strictly by structured system tier category
             activeItemsList = fullCorpusRaw.filter(item => item.cat === currentCategory);
         }
         
@@ -608,7 +637,6 @@
         
         if (currentPage > totalPages) currentPage = totalPages;
 
-        // Calculate chunk arrays for current page window boundary
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
         
@@ -630,7 +658,6 @@
             grid.appendChild(card);
         });
 
-        // Update pagination numbers text values
         document.getElementById('pageInfo').textContent = `पेज ${currentPage} of ${totalPages}`;
         document.getElementById('prevPageBtn').disabled = (currentPage === 1);
         document.getElementById('nextPageBtn').disabled = (currentPage === totalPages);
@@ -660,9 +687,16 @@
         filterCorpus();
     }
 
+    // --- INTEGRATED DUAL CONFIGURATION PROCESSOR ---
     function handleCardClick(hindiWord) {
-        structuralSentence.push(hindiWord);
-        renderSentenceDisplay();
+        if (currentMode === 'basic') {
+            // Simple Mode: Direct, immediate single-press speech execution
+            executeSpeech(hindiWord);
+        } else {
+            // Conversational Mode: Construct sentence array structure
+            structuralSentence.push(hindiWord);
+            renderSentenceDisplay();
+        }
     }
 
     function renderSentenceDisplay() {
@@ -690,11 +724,14 @@
     function speakSentence() {
         if (structuralSentence.length === 0) return;
         const fullPhrase = structuralSentence.join(' ');
-        
+        executeSpeech(fullPhrase);
+    }
+
+    function executeSpeech(phrase) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(fullPhrase);
-            utterance.rate = 0.75; // Pacing locked for post-stroke acoustic processing decay
+            const utterance = new SpeechSynthesisUtterance(phrase);
+            utterance.rate = 0.75; // Clinical auditory pacing matrix locked
             
             const voices = window.speechSynthesis.getVoices();
             const hindiVoice = voices.find(v => v.lang.includes('hi') || v.lang.includes('hi-IN'));
@@ -702,6 +739,17 @@
             
             window.speechSynthesis.speak(utterance);
         }
+    }
+
+    // Dynamic Engine Mode Toggler
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('btnBasic').classList.toggle('active', mode === 'basic');
+        document.getElementById('btnAdvanced').classList.toggle('active', mode === 'advanced');
+        
+        // Toggle visual sentence builder interface depending on system tier selection
+        document.getElementById('sentenceBar').style.display = (mode === 'advanced') ? 'flex' : 'none';
+        clearSentence();
     }
 
     if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
