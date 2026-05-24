@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Aphasia Contextual Engine</title>
+    <title>HearLink AAC - Complete Aphasia Contextual Engine</title>
     <style>
         :root {
             --primary: #0284c7;
@@ -41,6 +41,7 @@
 
         .brand { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
 
+        /* Unified Mode Selector */
         .tier-toggle {
             display: flex;
             background: #f1f5f9;
@@ -171,7 +172,6 @@
             color: var(--primary);
         }
         
-        /* Highlight the Urgent Needs Category Tab uniquely for rapid processing */
         #cat-urgent.active {
             background: #fee2e2;
             border-color: var(--urgent-color);
@@ -270,13 +270,13 @@
 
 <script>
     let currentMode = 'basic'; 
-    let currentCategory = 'urgent'; // Defaulting to immediate emergency protocols for post-stroke security
+    let currentCategory = 'urgent'; 
     let activeItemsList = [];
     let currentPage = 1;
     let structuralSentence = [];
-    const itemsPerPage = 8; // Locked to 8 item slots per view boundary to mitigate visuo-spatial search collapse
+    const itemsPerPage = 8; // Mitigates focal field visual neglect and search errors
 
-    // --- RESTRUCTURED STRATEGIC CONTEXTUAL CORPUS MATRIX ---
+    // --- STRATEGIC CONTEXTUAL CORPUS MATRIX PARSED DIRECTLY FROM YOUR FILE ---
     const fullCorpusRaw = [
         // Context 1: Urgent Needs & Pain (🚨)
         { file: "Emergency_6338", hindi: "आपातकाल / एमरजेंसी", cat: "urgent" },
@@ -306,7 +306,7 @@
         // Context 3: Daily Routine & Personal Care (🧼)
         { file: "Toilet_6247", hindi: "शौचालय जाना है", cat: "care" },
         { file: "Bathing_6248", hindi: "नहाना है", cat: "care" },
-        { file: "Comb hair_6461", hindi: "कंघी करना", cat: "care" },
+        { file: "Comb hair_6461", hindi: "कंघा करना", cat: "care" },
         { file: "Blow nose_6464", hindi: "नाक साफ करना", cat: "care" },
         { file: "Shampoo_6466", hindi: "शैम्पू", cat: "care" },
         { file: "Soap_6465", hindi: "साबुन", cat: "care" },
@@ -480,8 +480,10 @@
 
     function handleCardClick(hindiWord) {
         if (currentMode === 'basic') {
+            // Simple Mode execution pipeline
             executeSpeech(hindiWord);
         } else {
+            // Sentence parsing pipeline
             structuralSentence.push(hindiWord);
             renderSentenceDisplay();
         }
@@ -515,15 +517,35 @@
         executeSpeech(fullPhrase);
     }
 
+    // --- INTEGRATED NATIVE INDIAN REGIONAL HINDI ACCENT MATRIX ---
     function executeSpeech(phrase) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(phrase);
-            utterance.rate = 0.70; // Clinical paced speech matrix for stroke survivors
             
+            // Clinical vocal decay processing parameters
+            utterance.rate = 0.76;  
+            utterance.pitch = 1.0;   
+            utterance.volume = 1.0;  
+
             const voices = window.speechSynthesis.getVoices();
-            const hindiVoice = voices.find(v => v.lang.includes('hi') || v.lang.includes('hi-IN'));
-            if (hindiVoice) utterance.voice = hindiVoice;
+            
+            // Hard filtering for genuine 'hi-IN' localization profiles
+            let nativeHindiVoice = voices.find(v => 
+                v.lang === 'hi-IN' || 
+                v.lang === 'hi_IN' || 
+                v.name.toLowerCase().includes('india') || 
+                v.name.toLowerCase().includes('hindi')
+            );
+
+            // Google system wrapper asset validation fallback
+            if (!nativeHindiVoice) {
+                nativeHindiVoice = voices.find(v => v.name.includes('Google हिन्दी'));
+            }
+
+            if (nativeHindiVoice) {
+                utterance.voice = nativeHindiVoice;
+            }
             
             window.speechSynthesis.speak(utterance);
         }
