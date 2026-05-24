@@ -1,1 +1,414 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HearLink AAC - Jellow Corpus Fixed</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-light: #e0f2fe;
+            --bg: #f8fafc;
+            --text: #0f172a;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
 
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            box-sizing: border-box;
+        }
+
+        .brand { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+
+        .tier-toggle {
+            display: flex;
+            background: var(--bg);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .tier-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .tier-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .search-container {
+            padding: 10px 15px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .search-input:focus { border-color: var(--primary); outline: none; }
+
+        #sentenceBar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            min-height: 70px;
+            box-sizing: border-box;
+        }
+
+        .sentence-display {
+            flex: 1;
+            background: var(--bg);
+            border: 2px dashed var(--border);
+            border-radius: 14px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            padding: 5px 15px;
+            gap: 10px;
+            overflow-x: auto;
+        }
+
+        .phrase-chip {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .phrase-chip .remove-x { cursor: pointer; font-weight: 900; color: #38bdf8; }
+
+        .action-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 1rem;
+            height: 50px;
+        }
+
+        .clear-btn { background: #64748b; }
+
+        .workspace { display: flex; flex: 1; overflow: hidden; }
+
+        .sidebar {
+            width: 120px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px 5px;
+            overflow-y: auto;
+        }
+
+        .cat-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 5px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--bg);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #475569;
+            gap: 6px;
+        }
+
+        .cat-btn.active {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .grid-container { flex: 1; padding: 15px; overflow-y: auto; }
+        .aac-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)); gap: 12px; }
+
+        .aac-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            aspect-ratio: 1 / 1;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .aac-image { width: 75%; height: 75%; object-fit: contain; pointer-events: none; }
+        .aac-label { font-size: 0.95rem; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.2; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">HearLink <span style="color: #64748b; font-weight: 400;">AAC</span></div>
+        <div class="tier-toggle">
+            <button id="btnBasic" class="tier-btn" onclick="setTier('basic')">बुनियादी</button>
+            <button id="btnAdvanced" class="tier-btn active" onclick="setTier('advanced')">बातचीत मोड</button>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="शब्द या फ़ाइल आईडी खोजें... (Search...)" oninput="filterGrid()">
+    </div>
+
+    <div id="sentenceBar">
+        <button class="action-btn clear-btn" onclick="clearSentence()">हटाएं</button>
+        <div id="sentenceDisplay" class="sentence-display"></div>
+        <button class="action-btn" onclick="speakSentence()">🗣️ बोलें</button>
+    </div>
+
+    <div class="workspace">
+        <div class="sidebar" id="categorySidebar"></div>
+        <div class="grid-container">
+            <div class="aac-grid" id="aacGrid"></div>
+        </div>
+    </div>
+
+<script>
+    let currentTier = 'advanced';
+    let currentCategory = 'common';
+    let structuralSentence = [];
+
+    // --- EXPANDED DATA ARCHITECTURE MAPPED TO ICONS ---
+    // 'file' stores the string matching your files inside 'idc_symbols/' folder.
+    // 'hindi' displays text labels and speaks native clinical translation vectors.
+    const aacCorpus = {
+        common: {
+            label: "मुख्य शब्द",
+            icon: "💬",
+            items: [
+                { file: "Yes_7001", hindi: "हाँ" },
+                { file: "No_7002", hindi: "नहीं" },
+                { file: "Please_7003", hindi: "कृपया" },
+                { file: "Thank you_7004", hindi: "धन्यवाद" },
+                { file: "Hello_7005", hindi: "नमस्ते" },
+                { file: "I_7006", hindi: "मैं" },
+                { file: "You_7007", hindi: "आप" }
+            ]
+        },
+        family: {
+            label: "परिवार",
+            icon: "👨‍👩‍👧‍👦",
+            items: [
+                { file: "Aunt's birthday_7264", hindi: "चाची का जन्मदिन" },
+                { file: "Father_7010", hindi: "पिताजी" },
+                { file: "Mother_7011", hindi: "माताजी" },
+                { file: "Brother_7012", hindi: "भाई" },
+                { file: "Sister_7013", hindi: "बहन" }
+            ]
+        },
+        food: {
+            label: "भोजन",
+            icon: "🍛",
+            items: [
+                { file: "Water_7050", hindi: "पानी" },
+                { file: "Rice_7051", hindi: "चावल" },
+                { file: "Roti_7052", hindi: "रोटी" },
+                { file: "Tea_7053", hindi: "चाय" }
+            ]
+        },
+        actions: {
+            label: "क्रियाएं",
+            icon: "🏃",
+            items: [
+                { file: "Want_7101", hindi: "चाहिए" },
+                { file: "Eat_7102", hindi: "खाना" },
+                { file: "Drink_7103", hindi: "पीना" },
+                { file: "Go_7104", hindi: "जाना" },
+                { file: "Sleep_7105", hindi: "सोना" }
+            ]
+        }
+    };
+
+    function initAAC() {
+        renderSidebar();
+        renderGrid();
+    }
+
+    function renderSidebar() {
+        const sidebar = document.getElementById('categorySidebar');
+        sidebar.innerHTML = '';
+        Object.keys(aacCorpus).forEach(key => {
+            const cat = aacCorpus[key];
+            const btn = document.createElement('button');
+            btn.className = `cat-btn ${currentCategory === key ? 'active' : ''}`;
+            btn.id = `cat-${key}`;
+            btn.onclick = () => {
+                currentCategory = key;
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('searchInput').value = '';
+                renderGrid();
+            };
+            btn.innerHTML = `<span>${cat.icon}</span><span>${cat.label}</span>`;
+            sidebar.appendChild(btn);
+        });
+    }
+
+    function renderGrid(filterText = '') {
+        const grid = document.getElementById('aacGrid');
+        grid.innerHTML = '';
+        
+        const currentItems = aacCorpus[currentCategory].items;
+        
+        currentItems.forEach(item => {
+            // Evaluates text against localized label match or backend file configuration
+            if (filterText && 
+                !item.hindi.includes(filterText) && 
+                !item.file.toLowerCase().includes(filterText.toLowerCase())) {
+                return;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'aac-card';
+            
+            // --- FIXED PATH RESOLVER LAYER ---
+            // Breaks down segments to cleanly bypass URL escape errors on special character paths
+            const folderPrefix = "idc_symbols";
+            const encodedFile = encodeURIComponent(item.file.trim());
+            const imageSrc = `./${folderPrefix}/${encodedFile}.svg`;
+            
+            card.onclick = () => handleCardClick(item.hindi);
+            card.innerHTML = `
+                <img class="aac-image" src="${imageSrc}" onerror="handleImgError(this)" alt="${item.hindi}">
+                <div class="aac-label">${item.hindi}</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function handleImgError(imgElement) {
+        imgElement.style.display = 'none';
+        const fallback = document.createElement('div');
+        fallback.style.fontSize = '2.5rem';
+        fallback.style.height = '75%';
+        fallback.style.display = 'flex';
+        fallback.style.alignItems = 'center';
+        fallback.style.justifyContent = 'center';
+        fallback.textContent = '🖼️';
+        imgElement.parentNode.insertBefore(fallback, imgElement);
+    }
+
+    function filterGrid() {
+        const text = document.getElementById('searchInput').value.trim();
+        renderGrid(text);
+    }
+
+    function handleCardClick(hindiWord) {
+        if (currentTier === 'basic') {
+            executeSpeech(hindiWord);
+        } else {
+            structuralSentence.push(hindiWord);
+            renderSentenceDisplay();
+        }
+    }
+
+    function renderSentenceDisplay() {
+        const display = document.getElementById('sentenceDisplay');
+        display.innerHTML = '';
+        structuralSentence.forEach((word, idx) => {
+            const chip = document.createElement('div');
+            chip.className = 'phrase-chip';
+            chip.innerHTML = `<span>${word}</span><span class="remove-x" onclick="removeToken(${idx}, event)">×</span>`;
+            display.appendChild(chip);
+        });
+    }
+
+    function removeToken(index, event) {
+        event.stopPropagation();
+        structuralSentence.splice(index, 1);
+        renderSentenceDisplay();
+    }
+
+    function clearSentence() {
+        structuralSentence = [];
+        document.getElementById('sentenceDisplay').innerHTML = '';
+    }
+
+    function speakSentence() {
+        if (structuralSentence.length === 0) return;
+        const fullPhrase = structuralSentence.join(' ');
+        executeSpeech(fullPhrase);
+    }
+
+    function executeSpeech(phrase) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(phrase);
+            utterance.rate = 0.80; // Slower delivery for maximum acoustic processing accessibility
+            
+            const voices = window.speechSynthesis.getVoices();
+            const hindiVoice = voices.find(v => v.lang.includes('hi') || v.lang.includes('hi-IN'));
+            if (hindiVoice) utterance.voice = hindiVoice;
+            
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function setTier(tier) {
+        currentTier = tier;
+        document.getElementById('btnBasic').classList.toggle('active', tier === 'basic');
+        document.getElementById('btnAdvanced').classList.toggle('active', tier === 'advanced');
+        document.getElementById('sentenceBar').style.display = (tier === 'advanced') ? 'flex' : 'none';
+        clearSentence();
+    }
+
+    if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = initAAC;
+    }
+    window.onload = initAAC;
+</script>
+</body>
+</html>
