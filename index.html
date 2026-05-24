@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Complete Unified Engine</title>
+    <title>HearLink AAC - Complete Unified Dynamic Engine</title>
     <style>
         :root {
             --bg: #f8fafc;
@@ -13,6 +13,8 @@
             --primary: #0284c7;
             --primary-light: #e0f2fe;
             --urgent-color: #ef4444;
+            --editor-color: #a855f7;
+            --editor-light: #f3e8ff;
             
             /* Fitzgerald Key Grammar Colors (Pediatric System) */
             --fitz-social: #ffffff;
@@ -43,11 +45,11 @@
             gap: 8px;
             box-sizing: border-box;
         }
-        @media(min-width: 600px) {
+        @media(min-width: 750px) {
             header { flex-direction: row; justify-content: space-between; align-items: center; height: 75px; }
         }
 
-        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         .brand { font-size: 1.3rem; font-weight: 900; color: var(--primary); }
 
         .toggle-group { display: flex; background: #f1f5f9; padding: 3px; border-radius: 12px; border: 2px solid var(--border); }
@@ -58,6 +60,9 @@
         .toggle-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         #pop-adult.active { background: #0284c7; }
         #pop-child.active { background: #eab308; }
+        
+        .ed-toggle { border-color: var(--border); }
+        .ed-toggle.active { background: var(--editor-color); color: white; }
 
         .search-container { padding: 8px 20px; background: var(--card-bg); border-bottom: 2px solid var(--border); }
         .search-input {
@@ -65,6 +70,19 @@
             font-size: 1rem; font-weight: 700; box-sizing: border-box;
         }
         .search-input:focus { border-color: var(--primary); outline: none; }
+
+        #adminPanel {
+            background: var(--editor-light); padding: 12px 20px; border-bottom: 3px solid var(--editor-color);
+            display: flex; gap: 10px; flex-wrap: wrap; align-items: center; box-sizing: border-box;
+        }
+        .admin-input {
+            padding: 8px 12px; border: 2px solid var(--border); border-radius: 8px; font-weight: 600; font-size: 0.95rem;
+        }
+        .admin-input:focus { outline: none; border-color: var(--editor-color); }
+        .admin-btn {
+            background: var(--editor-color); color: white; border: none; padding: 8px 16px; font-weight: 800; border-radius: 8px; cursor: pointer;
+        }
+        .reset-btn { background: #64748b; margin-left: auto; }
 
         #sentenceBar {
             background: var(--card-bg); border-bottom: 2px solid var(--border); padding: 10px 20px;
@@ -107,8 +125,17 @@
             background: var(--card-bg); border: 3px solid var(--border); border-radius: 20px; padding: 10px;
             display: flex; flex-direction: column; align-items: center; justify-content: space-between;
             aspect-ratio: 1 / 1; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.01); text-align: center; box-sizing: border-box;
+            position: relative;
         }
         .aac-card:active { transform: scale(0.95); }
+        
+        .del-badge {
+            position: absolute; top: -6px; right: -6px; background: var(--urgent-color); color: white;
+            width: 24px; height: 24px; border-radius: 50%; font-weight: 900; font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            cursor: pointer; z-index: 10;
+        }
+
         .aac-image { width: 70%; height: 70%; object-fit: contain; pointer-events: none; }
         .aac-label { font-size: 1.1rem; font-weight: 900; line-height: 1.2; margin-top: 4px; }
 
@@ -127,6 +154,7 @@
                 <button id="pop-adult" class="toggle-btn active" onclick="setPopulation('adult')">वयस्क (Adult)</button>
                 <button id="pop-child" class="toggle-btn" onclick="setPopulation('child')">बच्चे (Child)</button>
             </div>
+            <button id="btnEditorToggle" class="toggle-btn ed-toggle" onclick="toggleEditorMode()">⚙️ संपादक मोड (Editor)</button>
         </div>
         <div class="toggle-group">
             <button id="tier-basic" class="toggle-btn active" onclick="setCommunicationTier('basic')">सरल मोड</button>
@@ -134,8 +162,24 @@
         </div>
     </header>
 
+    <div id="adminPanel" style="display: none;">
+        <span style="font-weight:800; color:var(--editor-color);">➕ नया सिम्बल जोड़ें:</span>
+        <input type="text" id="addFileName" class="admin-input" placeholder="फ़ाइल आईडी (e.g. Water_6707)">
+        <input type="text" id="addHindiLabel" class="admin-input" placeholder="हिंदी नाम (e.g. पानी)">
+        
+        <select id="addChildType" class="admin-input" style="display:none;">
+            <option value="noun">Noun (पीला)</option>
+            <option value="verb">Verb (हरा)</option>
+            <option value="descriptor">Modifier (नीला)</option>
+            <option value="social">Social (सफ़ेद)</option>
+        </select>
+
+        <button class="admin-btn" onclick="addNewItem()">सुरक्षित करें</button>
+        <button class="admin-btn reset-btn" onclick="resetToFactoryBaseline()">Reset Data</button>
+    </div>
+
     <div class="search-container" id="searchWrapper">
-        <input type="text" id="searchInput" class="search-input" placeholder="शब्द खोजें... (Search layout items)" oninput="handleSearch()">
+        <input type="text" id="searchInput" class="search-input" placeholder="पूरे 1000+ सिम्बल्स में खोजें... (Search all items)" oninput="handleSearch()">
     </div>
 
     <div id="sentenceBar" style="display: none;">
@@ -163,41 +207,14 @@
     let activeItemsList = [];
     let currentPage = 1;
     let structuralSentence = [];
+    let isEditorModeActive = false;
     const itemsPerPage = 8; 
 
-    // --- ADULT DATA MATRIX ---
-    const adultCorpus = [
-        { file: "Emergency_6338", hindi: "आपातकाल / एमरजेंसी", cat: "urgent" },
-        { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat: "urgent" },
-        { file: "I am hurt_6340", hindi: "मुझे चोट लगी है", cat: "urgent" },
-        { file: "I feel sick_6341", hindi: "मैं बीमार हूँ", cat: "urgent" },
-        { file: "Danger_6350", hindi: "खतरा", cat: "urgent" },
-        { file: "Help_6241", hindi: "मदद चाहिए", cat: "urgent" },
-        { file: "I need a break_6397", hindi: "मुझे आराम चाहिए", cat: "urgent" },
-        { file: "I want to be alone_6407", hindi: "मुझे अकेला छोड़ दें", cat: "urgent" },
-        { file: "Water_6707", hindi: "पानी", cat: "dining" },
-        { file: "Tea_6728", hindi: "चाय", cat: "dining" },
-        { file: "Milk_6708", hindi: "दूध", cat: "dining" },
-        { file: "Roti_6565", hindi: "रोटी", cat: "dining" },
-        { file: "Rice_6567", hindi: "चावल", cat: "dining" },
-        { file: "Dal_6568", hindi: "दाल", cat: "dining" },
-        { file: "Sabzi_6566", hindi: "सब्ज़ी", cat: "dining" },
-        { file: "Plate_6741", hindi: "थाली", cat: "dining" },
-        { file: "Toilet_6247", hindi: "शौचालय जाना है", cat: "care" },
-        { file: "Bathing_6248", hindi: "नहाना है", cat: "care" },
-        { file: "Sleep_6251", hindi: "सोना है", cat: "care" },
-        { file: "Hello_6361", hindi: "नमस्ते", cat: "social" },
-        { file: "Thank you_6392", hindi: "धन्यवाद", cat: "social" },
-        { file: "Please_6391", hindi: "कृपया", cat: "social" },
-        { file: "Bye_6362", hindi: "अलविदा", cat: "social" },
-        { file: "Doctor_6307", hindi: "डॉक्टर", cat: "therapy" },
-        { file: "Nurse_6308", hindi: "नर्स", cat: "therapy" },
-        { file: "Medicine_6343", hindi: "दवा लेनी है", cat: "therapy" },
-        { file: "Speech therapy_6488", hindi: "स्पीच थेरेपी", cat: "therapy" },
-        { file: "Air conditioner_6477", hindi: "एसी चलाएं", cat: "home" },
-        { file: "Fan_7025", hindi: "पंखा चलाएं", cat: "home" },
-        { file: "Light_6470", hindi: "लाइट", cat: "home" },
-        { file: "Television_7040", hindi: "टी वी देखना है", cat: "home" }
+    const childCore = [
+        { file: "Help_6241", hindi: "मदद", type: "social", core: true },
+        { file: "Please give me_6394", hindi: "चाहिए", type: "verb", core: true },
+        { file: "More_6406", hindi: "और", type: "descriptor", core: true },
+        { file: "I am all done_6398", hindi: "खत्म", type: "social", core: true }
     ];
 
     const adultCategories = {
@@ -209,52 +226,46 @@
         home: { label: "घर पर", icon: "🏠" }
     };
 
-    // --- CHILD DATA MATRIX ---
-    const childCore = [
-        { file: "Help_6241", hindi: "मदद", type: "social" },
-        { file: "Please give me_6394", hindi: "चाहिए", type: "verb" },
-        { file: "More_6406", hindi: "और", type: "descriptor" },
-        { file: "I am all done_6398", hindi: "खत्म", type: "social" }
-    ];
-
-    const childFringeCorpus = {
-        toys: {
-            label: "खिलौने", icon: "🧸",
-            items: [
-                { file: "Doll_6778", hindi: "गुड़िया", type: "noun" },
-                { file: "Car_7053", hindi: "गाड़ी", type: "noun" },
-                { file: "Blocks_6773", hindi: "ब्लॉक", type: "noun" },
-                { file: "Puzzle_6771", hindi: "पहेली", type: "noun" }
-            ]
-        },
-        food: {
-            label: "खाना", icon: "🍎",
-            items: [
-                { file: "Water_6707", hindi: "पानी", type: "noun" },
-                { file: "Milk_6708", hindi: "दूध", type: "noun" },
-                { file: "Apple_6683", hindi: "सेब", type: "noun" },
-                { file: "Biscuits_6653", hindi: "बिस्कुट", type: "noun" }
-            ]
-        },
-        play: {
-            label: "क्रियाएं", icon: "🏃",
-            items: [
-                { file: "Play with me_6784", hindi: "खेलना", type: "verb" },
-                { file: "Walk_7122", hindi: "चलना", type: "verb" },
-                { file: "Sleep_6251", hindi: "सोना", type: "verb" },
-                { file: "Eat with small bites_6505", hindi: "खाना", type: "verb" }
-            ]
-        },
-        feelings: {
-            label: "भावनाएं", icon: "😄",
-            items: [
-                { file: "Happy_6374", hindi: "अच्छा / खुश", type: "descriptor" },
-                { file: "Sad_6375", hindi: "उदास", type: "descriptor" },
-                { file: "Angry_6376", hindi: "नाराज़", type: "descriptor" },
-                { file: "Sick_6389", hindi: "बीमार", type: "descriptor" }
-            ]
-        }
+    const childFringeCategories = {
+        toys: { label: "खिलौने", icon: "🧸" },
+        food: { label: "खाना", icon: "🍎" },
+        play: { label: "क्रियाएं", icon: "🏃" },
+        feelings: { label: "भावनाएं", icon: "😄" }
     };
+
+    // --- RECOVERY FALLBACK ARCHITECTURE ---
+    // The browser dynamically initializes and builds this registry in localStorage using the script we ran.
+    let masterCorpus = JSON.parse(localStorage.getItem('hearlink_master_corpus'));
+
+    if (!masterCorpus) {
+        // Fallback baseline initialization block if cache is empty
+        masterCorpus = [
+            { file: "Emergency_6338", hindi: "आपातकाल / एमरजेंसी", cat_adult: "urgent", cat_child: "toys", type: "social" },
+            { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat_adult: "urgent", cat_child: "feelings", type: "descriptor" },
+            { file: "I am hurt_6340", hindi: "मुझे चोट लगी है", cat_adult: "urgent", cat_child: "feelings", type: "descriptor" },
+            { file: "I feel sick_6341", hindi: "मैं बीमार हूँ", cat_adult: "urgent", cat_child: "feelings", type: "descriptor" },
+            { file: "Danger_6350", hindi: "खतरा", cat_adult: "urgent", cat_child: "toys", type: "descriptor" },
+            { file: "Help_6241", hindi: "मदद चाहिए", cat_adult: "urgent", cat_child: "toys", type: "social" },
+            { file: "Water_6707", hindi: "पानी", cat_adult: "dining", cat_child: "food", type: "noun" },
+            { file: "Tea_6728", hindi: "चाय", cat_adult: "dining", cat_child: "food", type: "noun" },
+            { file: "Milk_6708", hindi: "दूध", cat_adult: "dining", cat_child: "food", type: "noun" },
+            { file: "Roti_6565", hindi: "रोटी", cat_adult: "dining", cat_child: "food", type: "noun" },
+            { file: "Rice_6567", hindi: "चावल", cat_adult: "dining", cat_child: "food", type: "noun" },
+            { file: "Toilet_6247", hindi: "शौचालय जाना है", cat_adult: "care", cat_child: "play", type: "verb" },
+            { file: "Bathing_6248", hindi: "नहाना है", cat_adult: "care", cat_child: "play", type: "verb" },
+            { file: "Sleep_6251", hindi: "सोना है", cat_adult: "care", cat_child: "play", type: "verb" },
+            { file: "Hello_6361", hindi: "नमस्ते", cat_adult: "social", cat_child: "toys", type: "social" },
+            { file: "Doctor_6307", hindi: "डॉक्टर", cat_adult: "therapy", cat_child: "toys", type: "noun" },
+            { file: "Medicine_6343", hindi: "दवा लेनी है", cat_adult: "therapy", cat_child: "food", type: "noun" },
+            { file: "Fan_7025", hindi: "पंखा चलाएं", cat_adult: "home", cat_child: "toys", type: "noun" },
+            { file: "Television_7040", hindi: "टी वी देखना है", cat_adult: "home", cat_child: "toys", type: "noun" }
+        ];
+        localStorage.setItem('hearlink_master_corpus', JSON.stringify(masterCorpus));
+    }
+
+    function saveCorpusToDisk() {
+        localStorage.setItem('hearlink_master_corpus', JSON.stringify(masterCorpus));
+    }
 
     function initSystem() {
         renderSidebar();
@@ -264,7 +275,7 @@
     function renderSidebar() {
         const sidebar = document.getElementById('categorySidebar');
         sidebar.innerHTML = '';
-        const sourceLayout = (activePopulation === 'adult') ? adultCategories : childFringeCorpus;
+        const sourceLayout = (activePopulation === 'adult') ? adultCategories : childFringeCategories;
         
         Object.keys(sourceLayout).forEach(key => {
             const cat = sourceLayout[key];
@@ -289,23 +300,19 @@
 
         if (activePopulation === 'adult') {
             if (searchText) {
-                activeItemsList = adultCorpus.filter(item => 
-                    item.hindi.includes(searchText) || item.file.toLowerCase().includes(searchText)
+                activeItemsList = masterCorpus.filter(item => 
+                    item.hindi.toLowerCase().includes(searchText) || item.file.toLowerCase().includes(searchText)
                 );
             } else {
-                activeItemsList = adultCorpus.filter(item => item.cat === currentCategory);
+                activeItemsList = masterCorpus.filter(item => item.cat_adult === currentCategory);
             }
         } else {
             if (searchText) {
-                let combinedFringe = [];
-                Object.keys(childFringeCorpus).forEach(k => {
-                    combinedFringe = combinedFringe.concat(childFringeCorpus[k].items);
-                });
-                activeItemsList = combinedFringe.filter(item => 
-                    item.hindi.includes(searchText) || item.file.toLowerCase().includes(searchText)
+                activeItemsList = masterCorpus.filter(item => 
+                    item.hindi.toLowerCase().includes(searchText) || item.file.toLowerCase().includes(searchText)
                 );
             } else {
-                activeItemsList = childFringeCorpus[currentCategory].items;
+                activeItemsList = masterCorpus.filter(item => item.cat_child === currentCategory);
             }
         }
         renderGridDisplay();
@@ -346,12 +353,23 @@
                 card.style.backgroundColor = 'var(--card-bg)';
             }
 
+            if (isEditorModeActive && !item.core) {
+                const delBadge = document.createElement('div');
+                delBadge.className = 'del-badge';
+                delBadge.textContent = '×';
+                delBadge.onclick = (e) => {
+                    e.stopPropagation();
+                    deleteItemFromCorpus(item.file);
+                };
+                card.appendChild(delBadge);
+            }
+
             const folderPrefix = "idc_symbols";
             const encodedFile = encodeURIComponent(item.file.trim());
             const imageSrc = `./${folderPrefix}/${encodedFile}.svg`;
             
             card.onclick = () => handleCardClick(item.hindi);
-            card.innerHTML = `
+            card.innerHTML += `
                 <img class="aac-image" src="${imageSrc}" onerror="handleImgError(this)" alt="${item.hindi}">
                 <div class="aac-label">${item.hindi}</div>
             `;
@@ -370,6 +388,53 @@
         fallback.style.justifyContent = 'center';
         fallback.textContent = (activePopulation === 'adult') ? '🖼️' : '🎨';
         imgElement.parentNode.insertBefore(fallback, imgElement);
+    }
+
+    function toggleEditorMode() {
+        isEditorModeActive = !isEditorModeActive;
+        document.getElementById('btnEditorToggle').classList.toggle('active', isEditorModeActive);
+        document.getElementById('adminPanel').style.display = isEditorModeActive ? 'flex' : 'none';
+        renderGridDisplay();
+    }
+
+    function addNewItem() {
+        const fileId = document.getElementById('addFileName').value.trim();
+        const hindiLabel = document.getElementById('addHindiLabel').value.trim();
+        const childGrammarType = document.getElementById('addChildType').value;
+
+        if (!fileId || !hindiLabel) {
+            alert("कृपया फ़ाइल का नाम और हिंदी लेबल दोनों दर्ज करें।");
+            return;
+        }
+
+        // Deep mapping logic coordinates structural contexts across populations fluidly
+        masterCorpus.push({
+            file: fileId,
+            hindi: hindiLabel,
+            cat_adult: (activePopulation === 'adult') ? currentCategory : 'home',
+            cat_child: (activePopulation === 'child') ? currentCategory : 'toys',
+            type: childGrammarType
+        });
+
+        saveCorpusToDisk();
+        document.getElementById('addFileName').value = '';
+        document.getElementById('addHindiLabel').value = '';
+        filterDataCorpus();
+    }
+
+    function deleteItemFromCorpus(fileId) {
+        if (confirm("क्या आप इस सिम्बल को हटाना चाहते हैं?")) {
+            masterCorpus = masterCorpus.filter(item => item.file !== fileId);
+            saveCorpusToDisk();
+            filterDataCorpus();
+        }
+    }
+
+    function resetToFactoryBaseline() {
+        if (confirm("क्या आप सभी कस्टमाइज़्ड डेटा को डिलीट कर फ़ैक्टरी स्टेट रिसेट करना चाहते हैं?")) {
+            localStorage.removeItem('hearlink_master_corpus');
+            location.reload();
+        }
     }
 
     function handleCardClick(hindiWord) {
@@ -409,49 +474,36 @@
         executeAcousticFeedback(fullPhrase);
     }
 
-    // --- ENHANCED ASYNCHRONOUS DIALECT MATCHING SPEECH ENGINE ---
     function executeAcousticFeedback(phrase) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             
-            // Generate utterance block instance
             const utterance = new SpeechSynthesisUtterance();
             utterance.text = phrase;
             utterance.volume = 1.0;
 
-            // Configure dynamic acoustic baseline vectors per therapeutic profile
             if (activePopulation === 'adult') {
-                utterance.rate = 0.70;  // Measured clinical pacing for stroke processing
-                utterance.pitch = 1.0;  // Normal neutral adult tone range
+                utterance.rate = 0.70;  
+                utterance.pitch = 1.0;  
             } else {
-                utterance.rate = 0.72;  // Engaging developmental learning speed
-                utterance.pitch = 1.25; // Friendly child-directed pitch mapping
+                utterance.rate = 0.72;  
+                utterance.pitch = 1.25; 
             }
 
-            // High-precision local dialect matching utility function
             const findTrueHindiVoice = () => {
                 const voices = window.speechSynthesis.getVoices();
-                
-                // Priority 1: True regional Indian Hindi locale profiles
                 let voice = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN');
-                
-                // Priority 2: Native Google Indian translation wrappers
                 if (!voice) voice = voices.find(v => v.name.includes('Google हिन्दी'));
-                
-                // Priority 3: Alternative text-string metadata scans
                 if (!voice) {
                     voice = voices.find(v => 
-                        v.name.toLowerCase().includes('hindi') || 
-                        v.name.toLowerCase().includes('india')
+                        v.name.toLowerCase().includes('hindi') || v.name.toLowerCase().includes('india')
                     );
                 }
                 return voice;
             };
 
             const targetVoice = findTrueHindiVoice();
-            if (targetVoice) {
-                utterance.voice = targetVoice;
-            }
+            if (targetVoice) utterance.voice = targetVoice;
 
             window.speechSynthesis.speak(utterance);
         }
@@ -472,6 +524,8 @@
         document.getElementById('pop-adult').classList.toggle('active', pop === 'adult');
         document.getElementById('pop-child').classList.toggle('active', pop === 'child');
         
+        document.getElementById('addChildType').style.display = (pop === 'child') ? 'inline-block' : 'none';
+
         const sub = document.getElementById('brandSub');
         sub.textContent = (pop === 'adult') ? "Context AAC" : "Child Development";
         sub.style.color = (pop === 'adult') ? "#64748b" : "#eab308";
@@ -491,11 +545,8 @@
         clearSentence();
     }
 
-    // --- ANTI-LAG COUPLING HANDSHAKE MATRIX ---
-    // Forces the application to re-check voice buffers instantly as hardware engines change
     if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
         speechSynthesis.onvoiceschanged = () => {
-            // Warm up voice caches silently to bypass browser wake lag
             const warmUpUtterance = new SpeechSynthesisUtterance("");
             window.speechSynthesis.speak(warmUpUtterance);
             initSystem();
