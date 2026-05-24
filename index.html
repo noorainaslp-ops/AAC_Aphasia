@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Complete 1000+ Unified Engine</title>
+    <title>HearLink AAC - Complete Unified Dynamic Engine</title>
     <style>
         :root {
             --bg: #f8fafc; --text: #0f172a; --card-bg: #ffffff; --border: #cbd5e1;
@@ -42,8 +42,15 @@
         #cat-urgent.active { background: #fee2e2; border-color: var(--urgent-color); color: var(--urgent-color); }
         .grid-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; justify-content: space-between; }
         
-        /* STRICT 2x4 FORMATTING MATRIX GRID */
-        .aac-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 15px; flex: 1; max-height: 480px; }
+        /* LOCKED HIGH-ACCESSIBILITY VISUAL SEARCH SLOTS MATRIX (STRICT 2x4 FORMAT) */
+        .aac-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            grid-template-rows: repeat(2, 1fr); 
+            gap: 15px; 
+            flex: 1; 
+            max-height: 480px; 
+        }
         
         .aac-card { background: var(--card-bg); border: 3px solid var(--border); border-radius: 20px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 1 / 1; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.01); text-align: center; box-sizing: border-box; position: relative; }
         .aac-card:active { transform: scale(0.95); }
@@ -104,7 +111,7 @@
     let currentCategory = 'urgent'; let activeItemsList = [];
     let currentPage = 1; let structuralSentence = []; let isEditorModeActive = false;
     
-    // FORCED CONFIGURATION BOUNDARY LIMIT
+    // STRICT STRUCTURAL BOUNDARY FOR CONSTANT 2x4 FORMAT DISPLAY 
     const itemsPerPage = 8; 
 
     const childCore = [
@@ -132,14 +139,14 @@
     {
         "file": "About Me_6313",
         "hindi": "About Me",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "About Me_6339",
         "hindi": "About Me",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -147,7 +154,7 @@
         "file": "Action figure_6779",
         "hindi": "Action figure",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -167,14 +174,14 @@
     {
         "file": "Adventure book_6949",
         "hindi": "Adventure book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Adventure book_7176",
         "hindi": "Adventure book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -195,7 +202,7 @@
     {
         "file": "Afternoon_7186",
         "hindi": "Afternoon",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
@@ -216,7 +223,7 @@
     {
         "file": "Allergy_6349",
         "hindi": "Allergy",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -287,7 +294,7 @@
         "file": "Art and craft_6783",
         "hindi": "Art and craft",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -315,13 +322,13 @@
         "file": "Arts and crafts_6857",
         "hindi": "Arts and crafts",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Ashamed_6381",
         "hindi": "Ashamed",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "feelings",
         "type": "descriptor"
     },
@@ -412,7 +419,7 @@
     {
         "file": "Awesome!_6373",
         "hindi": "Awesome!",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -462,14 +469,14 @@
         "file": "Ball pit_6484",
         "hindi": "Ball pit",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Ball pit_7159",
         "hindi": "Ball pit",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -496,50 +503,50 @@
     {
         "file": "Barfi_6631",
         "hindi": "Barfi",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "Basketball_6822",
         "hindi": "Basketball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Bat and ball_6799",
         "hindi": "Bat and ball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Bat and ball_7118",
         "hindi": "Bat and ball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Bathing_6248",
         "hindi": "Bathing",
         "cat_adult": "care",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "social"
     },
     {
         "file": "Bathroom_7036",
         "hindi": "Bathroom",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Bathroom_7079",
         "hindi": "Bathroom",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -552,14 +559,14 @@
     {
         "file": "Bed Time Routine_6254",
         "hindi": "Bed Time Routine",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Bed time story book_6942",
         "hindi": "Bed time story book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -601,7 +608,7 @@
     {
         "file": "Belt_6440",
         "hindi": "Belt",
-        "cat_adult": "home",
+        "cat_adult": "care",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -616,7 +623,7 @@
         "file": "Bicycle_7054",
         "hindi": "Bicycle",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -720,7 +727,7 @@
     {
         "file": "Board game_6772",
         "hindi": "Board game",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -748,14 +755,14 @@
     {
         "file": "Book_7170",
         "hindi": "Book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Books_6273",
         "hindi": "Books",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -790,14 +797,14 @@
     {
         "file": "Bread_6521",
         "hindi": "Bread",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "Breakfast_6256",
         "hindi": "Breakfast",
-        "cat_adult": "urgent",
+        "cat_adult": "dining",
         "cat_child": "food",
         "type": "noun"
     },
@@ -839,8 +846,8 @@
     {
         "file": "Butter_6748",
         "hindi": "Butter",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -874,7 +881,7 @@
     {
         "file": "Cap_6439",
         "hindi": "Cap",
-        "cat_adult": "home",
+        "cat_adult": "care",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -960,7 +967,7 @@
         "hindi": "Change footwear",
         "cat_adult": "home",
         "cat_child": "toys",
-        "type": "noun"
+        "type": "verb"
     },
     {
         "file": "Change frock_7278",
@@ -974,7 +981,7 @@
         "hindi": "Change innerwear",
         "cat_adult": "home",
         "cat_child": "toys",
-        "type": "noun"
+        "type": "verb"
     },
     {
         "file": "Change jeans_6419",
@@ -986,15 +993,15 @@
     {
         "file": "Change leggings_6421",
         "hindi": "Change leggings",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "Change music_6849",
         "hindi": "Change music",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -1035,7 +1042,7 @@
     {
         "file": "Change socks_6427",
         "hindi": "Change socks",
-        "cat_adult": "home",
+        "cat_adult": "care",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -1063,8 +1070,8 @@
     {
         "file": "Cheese_6659",
         "hindi": "Cheese",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -1084,8 +1091,8 @@
     {
         "file": "Chicken_6574",
         "hindi": "Chicken",
-        "cat_adult": "social",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "social"
     },
     {
@@ -1147,8 +1154,8 @@
     {
         "file": "Chutney_6534",
         "hindi": "Chutney",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -1217,15 +1224,15 @@
     {
         "file": "Coffee_6729",
         "hindi": "Coffee",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "Cold coffee_6730",
         "hindi": "Cold coffee",
-        "cat_adult": "home",
-        "cat_child": "feelings",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "descriptor"
     },
     {
@@ -1238,7 +1245,7 @@
     {
         "file": "Cold_6388",
         "hindi": "Cold",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "feelings",
         "type": "descriptor"
     },
@@ -1266,14 +1273,14 @@
     {
         "file": "Comic book_6943",
         "hindi": "Comic book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Comic book_7171",
         "hindi": "Comic book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -1329,14 +1336,14 @@
     {
         "file": "Cousin's birthday_7265",
         "hindi": "Cousin's birthday",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Cousin_6296",
         "hindi": "Cousin",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -1406,8 +1413,8 @@
     {
         "file": "Curd_6572",
         "hindi": "Curd",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -1435,14 +1442,14 @@
         "file": "Cycle (For international version)_7132",
         "hindi": "Cycle (For international version)",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Cycle_6807",
         "hindi": "Cycle",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -1554,7 +1561,7 @@
         "file": "Dodgeball_6823",
         "hindi": "Dodgeball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -1602,8 +1609,8 @@
     {
         "file": "Dosa_6529",
         "hindi": "Dosa",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -1623,7 +1630,7 @@
     {
         "file": "Drawing book_6945",
         "hindi": "Drawing book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "verb"
     },
@@ -1707,8 +1714,8 @@
     {
         "file": "Eggs_6524",
         "hindi": "Eggs",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -1749,7 +1756,7 @@
     {
         "file": "English book_6956",
         "hindi": "English book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -1805,7 +1812,7 @@
     {
         "file": "Eyes_6924",
         "hindi": "Eyes",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
@@ -1854,7 +1861,7 @@
     {
         "file": "Favorite book_7178",
         "hindi": "Favorite book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -1875,7 +1882,7 @@
     {
         "file": "Feeling cold_6476",
         "hindi": "Feeling cold",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "feelings",
         "type": "descriptor"
     },
@@ -1917,15 +1924,15 @@
     {
         "file": "Fish_6573",
         "hindi": "Fish",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "Fish_6894",
         "hindi": "Fish",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -2043,22 +2050,22 @@
     {
         "file": "Fruit salad_6633",
         "hindi": "Fruit salad",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "Fruit shop_7139",
         "hindi": "Fruit shop",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "Fruit_6261",
         "hindi": "Fruit",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -2078,8 +2085,8 @@
     {
         "file": "Gajar halwa_6628",
         "hindi": "Gajar halwa",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -2099,7 +2106,7 @@
     {
         "file": "Geography book_6954",
         "hindi": "Geography book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -2148,7 +2155,7 @@
     {
         "file": "Good afternoon_6364",
         "hindi": "Good afternoon",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "verb"
     },
@@ -2260,8 +2267,8 @@
     {
         "file": "Grapes_6685",
         "hindi": "Grapes",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -2344,8 +2351,8 @@
     {
         "file": "Gulab jamun_6629",
         "hindi": "Gulab jamun",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -2456,28 +2463,28 @@
     {
         "file": "Help me do this_6342",
         "hindi": "Help me do this",
-        "cat_adult": "urgent",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
     {
         "file": "Help put on clothes_6451",
         "hindi": "Help put on clothes",
-        "cat_adult": "urgent",
+        "cat_adult": "care",
         "cat_child": "toys",
         "type": "social"
     },
     {
         "file": "Help remove clothes_6450",
         "hindi": "Help remove clothes",
-        "cat_adult": "urgent",
+        "cat_adult": "care",
         "cat_child": "toys",
         "type": "social"
     },
     {
         "file": "Help_6241",
         "hindi": "Help",
-        "cat_adult": "urgent",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "social"
     },
@@ -2561,14 +2568,14 @@
     {
         "file": "Home objects_6278",
         "hindi": "Home objects",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Homework_7011",
         "hindi": "Homework",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -2680,28 +2687,28 @@
     {
         "file": "I need a break_6397",
         "hindi": "I need a break",
-        "cat_adult": "urgent",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "I need help_6403",
         "hindi": "I need help",
-        "cat_adult": "urgent",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "social"
     },
     {
         "file": "I need more time_6406",
         "hindi": "I need more time",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "descriptor"
     },
     {
         "file": "I want to be alone_6407",
         "hindi": "I want to be alone",
-        "cat_adult": "urgent",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "verb"
     },
@@ -2736,7 +2743,7 @@
     {
         "file": "I was scolded_6356",
         "hindi": "I was scolded",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "feelings",
         "type": "descriptor"
     },
@@ -2799,8 +2806,8 @@
     {
         "file": "Ice cream_7110",
         "hindi": "Ice cream",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -2813,8 +2820,8 @@
     {
         "file": "Idli_6528",
         "hindi": "Idli",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -2827,14 +2834,14 @@
     {
         "file": "Indoor Games_6265",
         "hindi": "Indoor Games",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Indoor games_7141",
         "hindi": "Indoor games",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -2855,15 +2862,15 @@
     {
         "file": "Jacket_6437",
         "hindi": "Jacket",
-        "cat_adult": "home",
+        "cat_adult": "care",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Jackfruit_6697",
         "hindi": "Jackfruit",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -2898,7 +2905,7 @@
         "file": "Jump rope-Skipping (For international version)_7131",
         "hindi": "Jump rope-Skipping (For international version)",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -2932,8 +2939,8 @@
     {
         "file": "Khichdi_6527",
         "hindi": "Khichdi",
-        "cat_adult": "social",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "social"
     },
     {
@@ -2995,8 +3002,8 @@
     {
         "file": "Laddoo_6630",
         "hindi": "Laddoo",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -3037,8 +3044,8 @@
     {
         "file": "Leggings_6433",
         "hindi": "Leggings",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -3088,7 +3095,7 @@
         "hindi": "Light",
         "cat_adult": "home",
         "cat_child": "toys",
-        "type": "noun"
+        "type": "descriptor"
     },
     {
         "file": "Lion_6864",
@@ -3128,7 +3135,7 @@
     {
         "file": "Look and cross_6503",
         "hindi": "Look and cross",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "verb"
     },
@@ -3171,7 +3178,7 @@
         "file": "Make music_6860",
         "hindi": "Make music",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -3247,7 +3254,7 @@
     {
         "file": "Maths book_6951",
         "hindi": "Maths book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -3268,56 +3275,56 @@
     {
         "file": "Medical shop-Chemist's shop-Pharmacy_7133",
         "hindi": "Medical shop-Chemist's shop-Pharmacy",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Medicine_6343",
         "hindi": "Medicine",
-        "cat_adult": "therapy",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Medicine_7153",
         "hindi": "Medicine",
-        "cat_adult": "therapy",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Medu wada_6531",
         "hindi": "Medu wada",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Meet relatives_7145",
         "hindi": "Meet relatives",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Menu_7107",
         "hindi": "Menu",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Merry-go-round_6797",
         "hindi": "Merry-go-round",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "verb"
     },
     {
         "file": "Merry-go-round_7115",
         "hindi": "Merry-go-round",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "verb"
     },
@@ -3472,35 +3479,35 @@
         "file": "Music class_7090",
         "hindi": "Music class",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Music therapy_6492",
         "hindi": "Music therapy",
         "cat_adult": "therapy",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Music_6269",
         "hindi": "Music",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Muskmelon_6695",
         "hindi": "Muskmelon",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Mutton_6576",
         "hindi": "Mutton",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -3534,14 +3541,14 @@
     {
         "file": "Mystery book_6948",
         "hindi": "Mystery book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Mystery book_7175",
         "hindi": "Mystery book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -3590,7 +3597,7 @@
     {
         "file": "Nice to meet you_6368",
         "hindi": "Nice to meet you",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -3674,14 +3681,14 @@
     {
         "file": "Noodles_6583",
         "hindi": "Noodles",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
     {
         "file": "Noodles_6658",
         "hindi": "Noodles",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
@@ -3695,7 +3702,7 @@
     {
         "file": "November_7208",
         "hindi": "November",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
@@ -3744,7 +3751,7 @@
     {
         "file": "Omelette_7287",
         "hindi": "Omelette",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -3772,7 +3779,7 @@
     {
         "file": "Outdoor Games_6266",
         "hindi": "Outdoor Games",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -3794,7 +3801,7 @@
         "file": "Paint_6854",
         "hindi": "Paint",
         "cat_adult": "urgent",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -3843,14 +3850,14 @@
         "file": "Park_6321",
         "hindi": "Park",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Park_6793",
         "hindi": "Park",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -3870,8 +3877,8 @@
     {
         "file": "Pav bhaji_6585",
         "hindi": "Pav bhaji",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -3926,7 +3933,7 @@
     {
         "file": "Pentagon_6989",
         "hindi": "Pentagon",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "verb"
     },
@@ -3982,14 +3989,14 @@
     {
         "file": "Picture book_6947",
         "hindi": "Picture book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Picture book_7174",
         "hindi": "Picture book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -4101,7 +4108,7 @@
     {
         "file": "Play with me_6784",
         "hindi": "Play with me",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "verb"
     },
@@ -4185,8 +4192,8 @@
     {
         "file": "Poha_6525",
         "hindi": "Poha",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -4199,15 +4206,15 @@
     {
         "file": "Pomegranate_6691",
         "hindi": "Pomegranate",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Popcorn_7109",
         "hindi": "Popcorn",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -4339,7 +4346,7 @@
     {
         "file": "Remedial class_6497",
         "hindi": "Remedial class",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -4381,14 +4388,14 @@
     {
         "file": "Rhymes book_6944",
         "hindi": "Rhymes book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Rhymes book_7172",
         "hindi": "Rhymes book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -4458,8 +4465,8 @@
     {
         "file": "Salad_6580",
         "hindi": "Salad",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -4472,15 +4479,15 @@
     {
         "file": "Salwar kameez_6435",
         "hindi": "Salwar kameez",
-        "cat_adult": "home",
+        "cat_adult": "care",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Sambhar_6535",
         "hindi": "Sambhar",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -4521,8 +4528,8 @@
     {
         "file": "Sauce_6753",
         "hindi": "Sauce",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -4556,14 +4563,14 @@
     {
         "file": "School notebook_6950",
         "hindi": "School notebook",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "social"
     },
     {
         "file": "School notebooks_7012",
         "hindi": "School notebooks",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "social"
     },
@@ -4584,7 +4591,7 @@
     {
         "file": "Science book_6952",
         "hindi": "Science book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -4816,14 +4823,14 @@
         "file": "Sleep_6251",
         "hindi": "Sleep",
         "cat_adult": "care",
-        "cat_child": "play",
+        "cat_child": "toys",
         "type": "verb"
     },
     {
         "file": "Sleeping line_6975",
         "hindi": "Sleeping line",
         "cat_adult": "care",
-        "cat_child": "play",
+        "cat_child": "toys",
         "type": "verb"
     },
     {
@@ -4871,7 +4878,7 @@
     {
         "file": "Snowy_7219",
         "hindi": "Snowy",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
@@ -4892,14 +4899,14 @@
     {
         "file": "Social studies book_6955",
         "hindi": "Social studies book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Socks_7016",
         "hindi": "Socks",
-        "cat_adult": "home",
+        "cat_adult": "care",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -5053,14 +5060,14 @@
     {
         "file": "Story book_6946",
         "hindi": "Story book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Story book_7173",
         "hindi": "Story book",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -5088,8 +5095,8 @@
     {
         "file": "Strawberry_6689",
         "hindi": "Strawberry",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -5123,7 +5130,7 @@
     {
         "file": "Summer_7222",
         "hindi": "Summer",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -5153,27 +5160,27 @@
         "hindi": "Sweets(International version)",
         "cat_adult": "dining",
         "cat_child": "food",
-        "type": "noun"
+        "type": "descriptor"
     },
     {
         "file": "Sweets_6259",
         "hindi": "Sweets",
         "cat_adult": "dining",
         "cat_child": "food",
-        "type": "noun"
+        "type": "descriptor"
     },
     {
         "file": "Swim_6809",
         "hindi": "Swim",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Swimming_6829",
         "hindi": "Swimming",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -5208,28 +5215,28 @@
         "file": "Swiss ball_6482",
         "hindi": "Swiss ball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Swiss ball_7155",
         "hindi": "Swiss ball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Switch off TV_6844",
         "hindi": "Switch off TV",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Switch on TV_6843",
         "hindi": "Switch on TV",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -5250,7 +5257,7 @@
         "file": "TV_6268",
         "hindi": "TV",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -5313,7 +5320,7 @@
         "file": "Television_7040",
         "hindi": "Television",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -5333,21 +5340,21 @@
     {
         "file": "Textbook_6959",
         "hindi": "Textbook",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Textbook_7177",
         "hindi": "Textbook",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Textbooks_7013",
         "hindi": "Textbooks",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -5375,14 +5382,14 @@
     {
         "file": "Therapist_6309",
         "hindi": "Therapist",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Therapist_7154",
         "hindi": "Therapist",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -5424,7 +5431,7 @@
     {
         "file": "Time_6330",
         "hindi": "Time",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -5566,7 +5573,7 @@
         "hindi": "Tube light",
         "cat_adult": "home",
         "cat_child": "toys",
-        "type": "noun"
+        "type": "descriptor"
     },
     {
         "file": "Tuesday_7191",
@@ -5669,8 +5676,8 @@
     {
         "file": "Upma_6526",
         "hindi": "Upma",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -5690,14 +5697,14 @@
     {
         "file": "Vegetable shop_7138",
         "hindi": "Vegetable shop",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "Videogame_6777",
         "hindi": "Videogame",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -5705,34 +5712,34 @@
         "file": "Volleyball_6824",
         "hindi": "Volleyball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "Volume down_6848",
         "hindi": "Volume down",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Volume down_6852",
         "hindi": "Volume down",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Volume up_6847",
         "hindi": "Volume up",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "Volume up_6851",
         "hindi": "Volume up",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -5746,8 +5753,8 @@
     {
         "file": "Wafers_6656",
         "hindi": "Wafers",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -5818,7 +5825,7 @@
         "hindi": "Wear night clothes",
         "cat_adult": "care",
         "cat_child": "toys",
-        "type": "noun"
+        "type": "verb"
     },
     {
         "file": "Weather_6333",
@@ -5921,7 +5928,7 @@
     {
         "file": "Yesterday_7183",
         "hindi": "Yesterday",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
@@ -5943,13 +5950,13 @@
         "file": "Zoo_6329",
         "hindi": "Zoo",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "american football_6830",
         "hindi": "american football",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -5970,8 +5977,8 @@
     {
         "file": "bacon and eggs_6539",
         "hindi": "bacon and eggs",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -5984,8 +5991,8 @@
     {
         "file": "baked vegetables_6587",
         "hindi": "baked vegetables",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -5999,7 +6006,7 @@
         "file": "bat_6906",
         "hindi": "bat",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -6040,15 +6047,15 @@
     {
         "file": "black pudding_6541",
         "hindi": "black pudding",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "descriptor"
     },
     {
         "file": "black pudding_6588",
         "hindi": "black pudding",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "descriptor"
     },
     {
@@ -6075,35 +6082,35 @@
     {
         "file": "bread_6537",
         "hindi": "bread",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "bread_6589",
         "hindi": "bread",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "bread_6662",
         "hindi": "bread",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "breakfast burrito_6542",
         "hindi": "breakfast burrito",
-        "cat_adult": "urgent",
+        "cat_adult": "dining",
         "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "breakfast tacos_6543",
         "hindi": "breakfast tacos",
-        "cat_adult": "urgent",
+        "cat_adult": "dining",
         "cat_child": "food",
         "type": "noun"
     },
@@ -6119,7 +6126,7 @@
         "hindi": "brush teeth",
         "cat_adult": "care",
         "cat_child": "toys",
-        "type": "noun"
+        "type": "verb"
     },
     {
         "file": "buns_6663",
@@ -6173,8 +6180,8 @@
     {
         "file": "cauliflower cheese_6592",
         "hindi": "cauliflower cheese",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -6187,22 +6194,22 @@
     {
         "file": "cheese pudding_6593",
         "hindi": "cheese pudding",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "cheese sticks_6667",
         "hindi": "cheese sticks",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "chicken wings_6594",
         "hindi": "chicken wings",
-        "cat_adult": "social",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "social"
     },
     {
@@ -6222,14 +6229,14 @@
     {
         "file": "chocolate cookies_6680",
         "hindi": "chocolate cookies",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "chow mein_6596",
         "hindi": "chow mein",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -6257,7 +6264,7 @@
     {
         "file": "cookie_6637",
         "hindi": "cookie",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -6306,7 +6313,7 @@
     {
         "file": "cuppa noodles_6669",
         "hindi": "cuppa noodles",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
@@ -6362,8 +6369,8 @@
     {
         "file": "dragonfruit_6701",
         "hindi": "dragonfruit",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "verb"
     },
     {
@@ -6397,15 +6404,15 @@
     {
         "file": "eggs benedict_6547",
         "hindi": "eggs benedict",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "eggs sunny side_6548",
         "hindi": "eggs sunny side",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "descriptor"
     },
     {
@@ -6432,8 +6439,8 @@
     {
         "file": "fish and chips_6599",
         "hindi": "fish and chips",
-        "cat_adult": "social",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "social"
     },
     {
@@ -6447,7 +6454,7 @@
         "file": "foosball_6787",
         "hindi": "foosball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -6502,15 +6509,15 @@
     {
         "file": "fruit platter_6551",
         "hindi": "fruit platter",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "fruit punch_6734",
         "hindi": "fruit punch",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -6530,7 +6537,7 @@
     {
         "file": "granola bar_6643",
         "hindi": "granola bar",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
@@ -6587,14 +6594,14 @@
         "file": "handball_6831",
         "hindi": "handball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "hard boiled eggs_6552",
         "hindi": "hard boiled eggs",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -6691,7 +6698,7 @@
     {
         "file": "ipad games_6788",
         "hindi": "ipad games",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -6712,8 +6719,8 @@
     {
         "file": "kingfisher_6913",
         "hindi": "kingfisher",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -6761,8 +6768,8 @@
     {
         "file": "mac and cheese_6607",
         "hindi": "mac and cheese",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -6803,21 +6810,21 @@
     {
         "file": "mashed potatoes_6554",
         "hindi": "mashed potatoes",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "mashed potatoes_6608",
         "hindi": "mashed potatoes",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "memorial day_7245",
         "hindi": "memorial day",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -6873,14 +6880,14 @@
     {
         "file": "nutella_6766",
         "hindi": "nutella",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "oatmeal_6557",
         "hindi": "oatmeal",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -6895,7 +6902,7 @@
         "file": "paintball_6816",
         "hindi": "paintball",
         "cat_adult": "urgent",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -6936,8 +6943,8 @@
     {
         "file": "peanut butter_6767",
         "hindi": "peanut butter",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -6971,21 +6978,21 @@
     {
         "file": "poached eggs_6559",
         "hindi": "poached eggs",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "popcorn_6674",
         "hindi": "popcorn",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "president's day_7246",
         "hindi": "president's day",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -6999,15 +7006,15 @@
     {
         "file": "pudding_6611",
         "hindi": "pudding",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "pudding_6648",
         "hindi": "pudding",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -7027,8 +7034,8 @@
     {
         "file": "roast chicken_6615",
         "hindi": "roast chicken",
-        "cat_adult": "social",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "social"
     },
     {
@@ -7048,7 +7055,7 @@
     {
         "file": "rodent_6919",
         "hindi": "rodent",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "noun"
     },
@@ -7069,8 +7076,8 @@
     {
         "file": "salad dressing_6768",
         "hindi": "salad dressing",
-        "cat_adult": "care",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -7111,8 +7118,8 @@
     {
         "file": "scrambled eggs_6560",
         "hindi": "scrambled eggs",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -7133,7 +7140,7 @@
         "file": "skipping rope_6815",
         "hindi": "skipping rope",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -7167,7 +7174,7 @@
     {
         "file": "snowboarding_6838",
         "hindi": "snowboarding",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "toys",
         "type": "social"
     },
@@ -7189,7 +7196,7 @@
         "file": "softball_6840",
         "hindi": "softball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
@@ -7230,15 +7237,15 @@
     {
         "file": "tabasco sauce_6770",
         "hindi": "tabasco sauce",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "tacos_6622",
         "hindi": "tacos",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -7251,8 +7258,8 @@
     {
         "file": "tart_6651",
         "hindi": "tart",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -7279,22 +7286,22 @@
     {
         "file": "tortilla_6623",
         "hindi": "tortilla",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "trail mix_6679",
         "hindi": "trail mix",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "trifle_6652",
         "hindi": "trifle",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -7314,15 +7321,15 @@
     {
         "file": "valentines day_7248",
         "hindi": "valentines day",
-        "cat_adult": "home",
+        "cat_adult": "therapy",
         "cat_child": "toys",
         "type": "noun"
     },
     {
         "file": "vegetable sticks_6682",
         "hindi": "vegetable sticks",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -7335,7 +7342,7 @@
     {
         "file": "virtual reality games_6790",
         "hindi": "virtual reality games",
-        "cat_adult": "home",
+        "cat_adult": "social",
         "cat_child": "play",
         "type": "noun"
     },
@@ -7343,14 +7350,14 @@
         "file": "vollleyball_6841",
         "hindi": "vollleyball",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     },
     {
         "file": "waffles_6561",
         "hindi": "waffles",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
@@ -7363,29 +7370,29 @@
     {
         "file": "white pudding_6562",
         "hindi": "white pudding",
-        "cat_adult": "social",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "descriptor"
     },
     {
         "file": "white pudding_6624",
         "hindi": "white pudding",
-        "cat_adult": "social",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "descriptor"
     },
     {
         "file": "wrap_6563",
         "hindi": "wrap",
-        "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_adult": "dining",
+        "cat_child": "food",
         "type": "noun"
     },
     {
         "file": "xbox_6791",
         "hindi": "xbox",
         "cat_adult": "home",
-        "cat_child": "toys",
+        "cat_child": "play",
         "type": "noun"
     }
 ]
@@ -7430,7 +7437,6 @@
     function renderGridDisplay() {
         const grid = document.getElementById('aacGrid'); grid.innerHTML = ''; let displaySet = [];
         
-        // Enforce strict 8 elements segmentation matrix boundary rules
         if (activePopulation === 'adult') {
             document.getElementById('paginationWrapper').style.display = 'flex';
             const totalItems = activeItemsList.length; const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
@@ -7441,12 +7447,12 @@
             document.getElementById('pageInfo').textContent = `पेज ${currentPage} of ${totalPages}`;
             document.getElementById('prevPageBtn').disabled = (currentPage === 1); document.getElementById('nextPageBtn').disabled = (currentPage === totalPages);
         } else {
-            // Child view limits view space rules: 4 items fixed core, 4 items fringe category allocation
             document.getElementById('paginationWrapper').style.display = 'flex';
             const totalItems = activeItemsList.length; const totalPages = Math.ceil(totalItems / 4) || 1;
             if (currentPage > totalPages) currentPage = totalPages;
             
             let fringeSlice = activeItemsList.slice((currentPage - 1) * 4, currentPage * 4);
+            // Locks exactly 4 core vocabulary terms with 4 contextual fringe elements to output an explicit 8-stimuli display view
             displaySet = [...childCore, ...fringeSlice];
             
             document.getElementById('pageInfo').textContent = `पेज ${currentPage} of ${totalPages}`;
@@ -7491,15 +7497,40 @@
     function clearSentence() { structuralSentence = []; document.getElementById('sentenceDisplay').innerHTML = ''; }
     function speakSentence() { if (structuralSentence.length === 0) return; executeAcousticFeedback(structuralSentence.join(' ')); }
 
+    // --- AUDIO TIMING RESOLUTION COUPLING HANDSHAKE ---
     function executeAcousticFeedback(phrase) {
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(phrase); utterance.volume = 1.0;
-            if (activePopulation === 'adult') { utterance.rate = 0.70; utterance.pitch = 1.0; } else { utterance.rate = 0.72; utterance.pitch = 1.25; }
-            const voices = window.speechSynthesis.getVoices();
-            let voice = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN') || voices.find(v => v.name.includes('Google हिन्दी'));
-            if (voice) utterance.voice = voice; window.speechSynthesis.speak(utterance);
+            window.speechSynthesis.cancel(); 
+            const utterance = new SpeechSynthesisUtterance(phrase); 
+            utterance.volume = 1.0;
+            
+            if (activePopulation === 'adult') { 
+                utterance.rate = 0.70; 
+                utterance.pitch = 1.0; 
+            } else { 
+                utterance.rate = 0.72; 
+                utterance.pitch = 1.25; 
+            }
+            
+            const findTrueHindiVoice = () => {
+                const voices = window.speechSynthesis.getVoices();
+                let voice = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN');
+                if (!voice) voice = voices.find(v => v.name.includes('Google हिन्दी'));
+                if (!voice) {
+                    voice = voices.find(v => 
+                        v.name.toLowerCase().includes('hindi') || 
+                        v.name.toLowerCase().includes('india')
+                    );
+                }
+                return voice;
+            };
+
+            const targetVoice = findTrueHindiVoice();
+            if (targetVoice) utterance.voice = targetVoice; 
+            window.speechSynthesis.speak(utterance);
         }
     }
+    
     function changePage(dir) { currentPage += dir; renderGridDisplay(); }
     function handleSearch() { currentPage = 1; filterDataCorpus(); }
     function setPopulation(pop) { activePopulation = pop; document.getElementById('pop-adult').classList.toggle('active', pop === 'adult'); document.getElementById('pop-child').classList.toggle('active', pop === 'child'); document.getElementById('addChildType').style.display = (pop === 'child') ? 'inline-block' : 'none'; document.getElementById('brandSub').textContent = (pop === 'adult') ? "Context AAC" : "Child Development"; currentCategory = (pop === 'adult') ? 'urgent' : 'toys'; currentPage = 1; document.getElementById('searchInput').value = ''; initSystem(); }
