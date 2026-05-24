@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Dual Mode Engine</title>
+    <title>HearLink AAC - Aphasia Contextual Engine</title>
     <style>
         :root {
             --primary: #0284c7;
             --primary-light: #e0f2fe;
-            --bg: #f1f5f9;
+            --bg: #f8fafc;
             --text: #0f172a;
             --card-bg: #ffffff;
             --border: #cbd5e1;
+            --urgent-color: #ef4444;
         }
 
         body {
@@ -40,17 +41,16 @@
 
         .brand { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
 
-        /* Mode Selector Styling */
         .tier-toggle {
             display: flex;
-            background: var(--bg);
+            background: #f1f5f9;
             padding: 4px;
             border-radius: 12px;
             border: 2px solid var(--border);
         }
 
         .tier-btn {
-            padding: 8px 16px;
+            padding: 8px 18px;
             border: none;
             background: transparent;
             font-weight: 800;
@@ -68,13 +68,13 @@
         }
 
         .search-container {
-            padding: 12px 20px;
+            padding: 10px 20px;
             background: var(--card-bg);
             border-bottom: 2px solid var(--border);
         }
         .search-input {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             border: 3px solid var(--border);
             border-radius: 12px;
             font-size: 1.1rem;
@@ -92,7 +92,6 @@
             align-items: center;
             min-height: 80px;
             box-sizing: border-box;
-            transition: all 0.2s ease;
         }
 
         .sentence-display {
@@ -139,7 +138,7 @@
         .workspace { display: flex; flex: 1; overflow: hidden; }
 
         .sidebar {
-            width: 140px;
+            width: 160px;
             background: var(--card-bg);
             border-right: 2px solid var(--border);
             display: flex;
@@ -154,23 +153,29 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 14px 5px;
+            padding: 12px 4px;
             border: 2px solid var(--border);
             border-radius: 16px;
-            background: var(--bg);
+            background: #f8fafc;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 800;
             color: #475569;
-            gap: 8px;
-            transition: all 0.2s ease;
+            gap: 6px;
+            transition: all 0.15s ease;
         }
 
         .cat-btn.active {
             background: var(--primary-light);
             border-color: var(--primary);
             color: var(--primary);
-            transform: scale(1.03);
+        }
+        
+        /* Highlight the Urgent Needs Category Tab uniquely for rapid processing */
+        #cat-urgent.active {
+            background: #fee2e2;
+            border-color: var(--urgent-color);
+            color: var(--urgent-color);
         }
 
         .grid-container { 
@@ -184,56 +189,57 @@
         
         .aac-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-            gap: 16px; 
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+            gap: 20px; 
         }
 
         .aac-card {
             background: var(--card-bg);
             border: 3px solid var(--border);
-            border-radius: 20px;
-            padding: 12px;
+            border-radius: 24px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
             aspect-ratio: 1 / 1;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
             text-align: center;
             box-sizing: border-box;
-            transition: transform 0.15s ease, border-color 0.15s ease;
+            transition: transform 0.1s ease, border-color 0.1s ease;
         }
-        .aac-card:active { transform: scale(0.95); border-color: var(--primary); }
+        .aac-card:active { transform: scale(0.96); border-color: var(--primary); }
 
         .aac-image { width: 75%; height: 75%; object-fit: contain; pointer-events: none; }
-        .aac-label { font-size: 1.05rem; font-weight: 800; color: var(--text); margin-top: 6px; line-height: 1.2; }
+        .aac-label { font-size: 1.15rem; font-weight: 900; color: var(--text); margin-top: 6px; line-height: 1.2; }
 
         .pagination-bar {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
             margin-top: 20px;
             padding-top: 10px;
-            border-top: 1px solid var(--border);
+            border-top: 2px solid #e2e8f0;
         }
         .page-btn {
             background: var(--card-bg);
             border: 2px solid var(--border);
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1rem;
             cursor: pointer;
         }
-        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-        .page-info { font-weight: 800; color: #475569; }
+        .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .page-info { font-weight: 800; color: #475569; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand">HearLink <span style="color: #64748b; font-weight: 400;">AAC</span></div>
+        <div class="brand">HearLink <span style="color: #64748b; font-weight: 400;">Context AAC</span></div>
         <div class="tier-toggle">
             <button id="btnBasic" class="tier-btn active" onclick="setMode('basic')">सरल मोड</button>
             <button id="btnAdvanced" class="tier-btn" onclick="setMode('advanced')">बातचीत मोड</button>
@@ -241,7 +247,7 @@
     </header>
 
     <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="सिम्बल्स में खोजें... (Search symbols)" oninput="handleSearch()">
+        <input type="text" id="searchInput" class="search-input" placeholder="शब्द खोजें... (Search across context layouts)" oninput="handleSearch()">
     </div>
 
     <div id="sentenceBar" style="display: none;">
@@ -263,328 +269,113 @@
     </div>
 
 <script>
-    let currentMode = 'basic'; // Defaulting to immediate single symbol response frame
-    let currentCategory = 'common';
+    let currentMode = 'basic'; 
+    let currentCategory = 'urgent'; // Defaulting to immediate emergency protocols for post-stroke security
     let activeItemsList = [];
     let currentPage = 1;
     let structuralSentence = [];
-    const itemsPerPage = 12;
+    const itemsPerPage = 8; // Locked to 8 item slots per view boundary to mitigate visuo-spatial search collapse
 
+    // --- RESTRUCTURED STRATEGIC CONTEXTUAL CORPUS MATRIX ---
     const fullCorpusRaw = [
-        { file: "Aaloo Poori_6523", hindi: "आलू पूरी", cat: "food" },
-        { file: "About Me_6313", hindi: "मेरे बारे में", cat: "common" },
-        { file: "About Me_6339", hindi: "स्वयं का परिचय", cat: "common" },
-        { file: "Action figure_6779", hindi: "खिलौना आकृति", cat: "fun" },
-        { file: "Activities_6270", hindi: "गतिविधियाँ", cat: "common" },
-        { file: "Adventure book_6949", hindi: "साहसिक किताब", cat: "fun" },
-        { file: "Aeroplane_7058", hindi: "हवाई जहाज", cat: "transport" },
-        { file: "Afraid_6377", hindi: "डरा हुआ", cat: "feelings" },
-        { file: "Afternoon_7186", hindi: "दोपहर", cat: "time" },
-        { file: "Air conditioner_6477", hindi: "एसी (AC)", cat: "home" },
-        { file: "Allergy_6349", hindi: "एलर्जी", cat: "medical" },
-        { file: "Amazed_6378", hindi: "अचंभित", cat: "feelings" },
-        { file: "Angry_6376", hindi: "नाराज़", cat: "feelings" },
-        { file: "Animals & Birds_6271", hindi: "पशु और पक्षी", cat: "animals" },
-        { file: "Ant_6870", hindi: "चींटी", cat: "animals" },
-        { file: "Apple juice_6711", hindi: "सेब का रस", cat: "food" },
-        { file: "Apple_6683", hindi: "सेब", cat: "food" },
-        { file: "April_7201", hindi: "अप्रैल", cat: "time" },
-        { file: "Art and craft_6783", hindi: "कला और शिल्प", cat: "fun" },
-        { file: "Ashamed_6381", hindi: "शर्मिंदा", cat: "feelings" },
-        { file: "August_7205", hindi: "अगस्त", cat: "time" },
-        { file: "Aunt's birthday_7264", hindi: "चाची का जन्मदिन", cat: "family" },
-        { file: "Aunt_6287", hindi: "चाची", cat: "family" },
-        { file: "Autumn_7224", hindi: "पतझड़", cat: "time" },
-        { file: "Awesome!_6373", hindi: "बहुत बढ़िया!", cat: "common" },
-        { file: "Baby_6303", hindi: "बच्चा", cat: "family" },
-        { file: "Back_6935", hindi: "पीठ", cat: "body" },
-        { file: "Badminton_6820", hindi: "बैडमिंटन", cat: "sports" },
-        { file: "Bag_7007", hindi: "बस्ता", cat: "common" },
-        { file: "Balcony_7037", hindi: "बालकनी", cat: "home" },
-        { file: "Banana milkshake_6725", hindi: "केले का शेक", cat: "food" },
-        { file: "Banana_6684", hindi: "केला", cat: "food" },
-        { file: "Bandage_6344", hindi: "पट्टी (Bandage)", cat: "medical" },
-        { file: "Barfi_6631", hindi: "बर्फी", cat: "food" },
-        { file: "Basketball_6822", hindi: "बास्केटबॉल", cat: "sports" },
-        { file: "Bat and ball_6799", hindi: "बल्ला और गेंद", cat: "sports" },
-        { file: "Bathing_6248", hindi: "नहाना", cat: "daily" },
-        { file: "Bathroom_7036", hindi: "स्नानघर", cat: "home" },
-        { file: "Bear_6880", hindi: "भालू", cat: "animals" },
-        { file: "Bed time story book_6942", hindi: "कहानी की किताब", cat: "fun" },
-        { file: "Bed_6472", hindi: "बिस्तर", cat: "home" },
-        { file: "Bee_6891", hindi: "मधुमक्खी", cat: "animals" },
-        { file: "Belt_6440", hindi: "बेल्ट", cat: "daily" },
-        { file: "Bhakri_6586", hindi: "भाकरी", cat: "food" },
-        { file: "Bicycle_7054", hindi: "साइकिल", cat: "transport" },
-        { file: "Bike_7057", hindi: "मोटरसाइकिल", cat: "transport" },
-        { file: "Bindi_7280", hindi: "बिंदी", cat: "daily" },
-        { file: "Birds_7180", hindi: "पक्षी", cat: "animals" },
-        { file: "Biscuits_6653", hindi: "बिस्कुट", cat: "food" },
-        { file: "Black_6961", hindi: "काला", cat: "common" },
-        { file: "Blanket_6474", hindi: "कंबल", cat: "home" },
-        { file: "Blocks_6773", hindi: "ब्लॉक खिलौने", cat: "fun" },
-        { file: "Blow nose_6464", hindi: "नाक साफ करना", cat: "daily" },
-        { file: "Blue_6962", hindi: "नीला", cat: "common" },
-        { file: "Board game_6772", hindi: "बोर्ड गेम", cat: "fun" },
-        { file: "Body_6272", hindi: "शरीर", cat: "body" },
-        { file: "Book_7170", hindi: "किताब", cat: "common" },
-        { file: "Bored_6383", hindi: "ऊब जाना", cat: "feelings" },
-        { file: "Bowl_6740", hindi: "कटोरा", cat: "home" },
-        { file: "Bread_6521", hindi: "ब्रेड", cat: "food" },
-        { file: "Breakfast_6256", hindi: "नाश्ता", cat: "daily" },
-        { file: "Brother_6284", hindi: "भाई", cat: "family" },
-        { file: "Brown_6963", hindi: "भूरा", cat: "common" },
-        { file: "Buffalo_6887", hindi: "भैंस", cat: "animals" },
-        { file: "Bus_7051", hindi: "बस", cat: "transport" },
-        { file: "Butter_6748", hindi: "مक्खन", cat: "food" },
-        { file: "Bye_6362", hindi: "बाय-बाय", cat: "common" },
-        { file: "Cake_6626", hindi: "केक", cat: "food" },
-        { file: "Cap_6439", hindi: "टोपी", cat: "daily" },
-        { file: "Car_7053", hindi: "कार", cat: "transport" },
-        { file: "Caregiver_6310", hindi: "देखभाल करने वाला", cat: "family" },
-        { file: "Cat_6862", hindi: "बिल्ली", cat: "animals" },
-        { file: "Chaat_6654", hindi: "चाट", cat: "food" },
-        { file: "Chair_7030", hindi: "कुर्सी", cat: "home" },
-        { file: "Change shoes_6426", hindi: "जूते बदलना", cat: "daily" },
-        { file: "Chappals_6447", hindi: "चप्पल", cat: "daily" },
-        { file: "Cheese_6659", hindi: "चीज़", cat: "food" },
-        { file: "Chess_7282", hindi: "शतरंज", cat: "sports" },
-        { file: "Chicken_6574", hindi: "चिकन", cat: "food" },
-        { file: "Chocolate milkshake_6723", hindi: "चॉकलेट शेक", cat: "food" },
-        { file: "Chocolate_6655", hindi: "चॉकलेट", cat: "food" },
-        { file: "Church_7070", hindi: "चर्च", cat: "places" },
-        { file: "Classroom_7082", hindi: "कक्षा", cat: "places" },
-        { file: "Clinic_6326", hindi: "क्लीनिक", cat: "medical" },
-        { file: "Clock_7047", hindi: "घड़ी", cat: "home" },
-        { file: "Clothes & More_6249", hindi: "कपड़े", cat: "daily" },
-        { file: "Cloudy_7216", hindi: "बादल", cat: "time" },
-        { file: "Coffee_6729", hindi: "कॉफी", cat: "food" },
-        { file: "Cold_6388", hindi: "ठंड", cat: "feelings" },
-        { file: "Colors_6274", hindi: "रंग", cat: "common" },
-        { file: "Comb hair_6461", hindi: "कंगी करना", cat: "daily" },
-        { file: "Computer_7041", hindi: "कंप्यूटर", cat: "home" },
-        { file: "Confused_6380", hindi: "उलझन में", cat: "feelings" },
-        { file: "Cow_6867", hindi: "गाए", cat: "animals" },
-        { file: "Crayon_6996", hindi: "क्रेयॉन", cat: "fun" },
-        { file: "Cricket_6819", hindi: "क्रिकेट", cat: "sports" },
-        { file: "Cup_6746", hindi: "कप", cat: "home" },
-        { file: "Curd_6572", hindi: "दही", cat: "food" },
-        { file: "Daily Activities_6234", hindi: "दैनिक कार्य", cat: "daily" },
-        { file: "Dal khichdi_6569", hindi: "दाल खिचड़ी", cat: "food" },
-        { file: "Dal_6568", hindi: "दाल", cat: "food" },
-        { file: "Dance_6859", hindi: "नृत्य", cat: "fun" },
-        { file: "Danger_6350", hindi: "खतरा", cat: "medical" },
-        { file: "December_7209", hindi: "दिसंबर", cat: "time" },
-        { file: "Disappointed_6382", hindi: "निराश", cat: "feelings" },
-        { file: "Diwali_7226", hindi: "दीवाली", cat: "time" },
-        { file: "Doctor_6307", hindi: "डॉक्टर", cat: "medical" },
-        { file: "Dog_6861", hindi: "कुत्ता", cat: "animals" },
-        { file: "Doll_6778", hindi: "गुड़िया", cat: "fun" },
-        { file: "Door_7024", hindi: "दरवाजा", cat: "home" },
-        { file: "Dosa_6529", hindi: "डोसा", cat: "food" },
-        { file: "Draw_6853", hindi: "चित्र बनाना", cat: "fun" },
-        { file: "Duck_6868", hindi: "बतख", cat: "animals" },
-        { file: "Ears_6926", hindi: "कान", cat: "body" },
-        { file: "Eating_6235", hindi: "खाना खाना", cat: "daily" },
-        { file: "Eggs_6524", hindi: "अंडे", cat: "food" },
-        { file: "Eid_7232", hindi: "ईद", cat: "time" },
-        { file: "Elephant_6863", hindi: "हाथी", cat: "animals" },
-        { file: "Emergency_6338", hindi: "आपातकाल", cat: "medical" },
-        { file: "Eraser_7020", hindi: "रबर (Eraser)", cat: "common" },
-        { file: "Evening_7187", hindi: "शाम", cat: "time" },
-        { file: "Excuse me_6399", hindi: "सुनिए", cat: "common" },
-        { file: "Eyes_6924", hindi: "आंखें", cat: "body" },
-        { file: "Fan_7025", hindi: "पंखा", cat: "home" },
-        { file: "Father_6283", hindi: "पिताजी", cat: "family" },
-        { file: "February_7199", hindi: "फरवरी", cat: "time" },
-        { file: "Feelings_6243", hindi: "भावनाएं", cat: "feelings" },
-        { file: "Fingers_6934", hindi: "उंगलियां", cat: "body" },
-        { file: "Fish_6894", hindi: "मछली", cat: "animals" },
-        { file: "Football_6826", hindi: "फुटबॉल", cat: "sports" },
-        { file: "Fork_6743", hindi: "कांटा चमच्च", cat: "home" },
-        { file: "Friday_7194", hindi: "शुक्रवार", cat: "time" },
-        { file: "Fridge_7043", hindi: "फ्रिज", cat: "home" },
-        { file: "Friends_6304", hindi: "मित्र", cat: "family" },
-        { file: "Fruit_6261", hindi: "फल", cat: "food" },
-        { file: "Ganesh chaturthi_7227", hindi: "गणेश चतुर्थी", cat: "time" },
-        { file: "Glass_6747", hindi: "ग्लास", cat: "home" },
-        { file: "Goat_6882", hindi: "बकरी", cat: "animals" },
-        { file: "Good afternoon_6364", hindi: "शुभ दोपहर", cat: "common" },
-        { file: "Good morning_6363", hindi: "सुप्रभात", cat: "common" },
-        { file: "Good night_6366", hindi: "शुभ रात्रि", cat: "common" },
-        { file: "Grandfather_6288", hindi: "दादाजी", cat: "family" },
-        { file: "Grandmother_6290", hindi: "दादीजी", cat: "family" },
-        { file: "Grapes_6685", hindi: "अंगूर", cat: "food" },
-        { file: "Green_6964", hindi: "हरा", cat: "common" },
-        { file: "Gulab jamun_6629", hindi: "गुलाब जामुन", cat: "food" },
-        { file: "Gurudwara_7071", hindi: "गुरुद्वारा", cat: "places" },
-        { file: "Hair_6923", hindi: "बाल", cat: "body" },
-        { file: "Hands_6933", hindi: "हाथ", cat: "body" },
-        { file: "Happy_6374", hindi: "खुश", cat: "feelings" },
-        { file: "Head_6922", hindi: "सिर", cat: "body" },
-        { file: "Hello_6361", hindi: "नमस्ते", cat: "common" },
-        { file: "Help_6241", hindi: "मदद", cat: "medical" },
-        { file: "Hi_6360", hindi: "हाय", cat: "common" },
-        { file: "Holi_7231", hindi: "होली", cat: "time" },
-        { file: "Horse_6876", hindi: "घोड़ा", cat: "animals" },
-        { file: "Hospital_6325", hindi: "अस्पताल", cat: "places" },
-        { file: "Hot_6387", hindi: "गरम", cat: "feelings" },
-        { file: "Hurt_6390", hindi: "दर्द / चोट", cat: "medical" },
-        { file: "I am sorry_7277", hindi: "माफ़ कीजिये", cat: "common" },
-        { file: "I feel sick_6341", hindi: "मैं बीमार हूँ", cat: "medical" },
-        { file: "Ice cream_7110", hindi: "आइसक्रीम", cat: "food" },
-        { file: "Idli_6528", hindi: "इडली", cat: "food" },
-        { file: "Irritated_6379", hindi: "चिढ़चिढ़ा", cat: "feelings" },
-        { file: "January_7198", hindi: "जनवरी", cat: "time" },
-        { file: "July_7204", hindi: "जुलाई", cat: "time" },
-        { file: "June_7203", hindi: "जून", cat: "time" },
-        { file: "Khichdi_6527", hindi: "खिचड़ी", cat: "food" },
-        { file: "Kitchen_7032", hindi: "रसोई", cat: "home" },
-        { file: "Knee_6938", hindi: "घुटने", cat: "body" },
-        { file: "Knife_6744", hindi: "चाकू", cat: "home" },
-        { file: "Laddoo_6630", hindi: "लड्डू", cat: "food" },
-        { file: "Legs_6940", hindi: "पैर", cat: "body" },
-        { file: "Lemon juice_6713", hindi: "नींबू पानी", cat: "food" },
-        { file: "Library_7085", hindi: "पुस्तकालय", cat: "places" },
-        { file: "Lion_6864", hindi: "शेर", cat: "animals" },
-        { file: "Living room_7033", hindi: "बैठक का कमरा", cat: "home" },
-        { file: "Lunch-Dinner_6257", hindi: "दोपहर/रात का खाना", cat: "daily" },
-        { file: "Mall_6316", hindi: "मॉल (Mall)", cat: "places" },
-        { file: "Mango_6686", hindi: "आम", cat: "food" },
-        { file: "March_7200", hindi: "मारर्च", cat: "time" },
-        { file: "May_7202", hindi: "मई", cat: "time" },
-        { file: "Medicine_6343", hindi: "दवा", cat: "medical" },
-        { file: "Medu wada_6531", hindi: "मेदु वड़ा", cat: "food" },
-        { file: "Milk_6708", hindi: "दूध", cat: "food" },
-        { file: "Monday_7190", hindi: "सोमवार", cat: "time" },
-        { file: "Money_6280", hindi: "पैसे", cat: "common" },
-        { file: "Monkey_6872", hindi: "बंदर", cat: "animals" },
-        { file: "Morning_7185", hindi: "सुबह", cat: "time" },
-        { file: "Mosque_7072", hindi: "मस्जिद", cat: "places" },
-        { file: "Mother_6281", hindi: "माताजी", cat: "family" },
-        { file: "Mouth_6927", hindi: "मुँह", cat: "body" },
-        { file: "Mutton_6576", hindi: "मटन", cat: "food" },
-        { file: "My birthday_7250", hindi: "मेरा जन्मदिन", cat: "family" },
-        { file: "Neck_6929", hindi: "गर्दन", cat: "body" },
-        { file: "Night_7188", hindi: "रात", cat: "time" },
-        { file: "Noodles_6658", hindi: "नूडल्स", cat: "food" },
-        { file: "Nose_6925", hindi: "नाक", cat: "body" },
-        { file: "November_7208", hindi: "नवंबर", cat: "time" },
-        { file: "Nurse_6308", hindi: "नर्स", cat: "medical" },
-        { file: "October_7207", hindi: "अक्टूबर", cat: "time" },
-        { file: "Orange_6687", hindi: "संतरा", cat: "food" },
-        { file: "Pants_6431", hindi: "पैंट", cat: "daily" },
-        { file: "Paratha_6530", hindi: "पराठा", cat: "food" },
-        { file: "Park_6321", hindi: "पार्क", cat: "places" },
-        { file: "Parrot_6865", hindi: "तोता", cat: "animals" },
-        { file: "Pav bhaji_6585", hindi: "पाव भाजी", cat: "food" },
-        { file: "Pencil_7017", hindi: "पेंसिल", cat: "common" },
-        { file: "Pillows_6473", hindi: "तकिया", cat: "home" },
-        { file: "Pineapple_6688", hindi: "अनानास", cat: "food" },
-        { file: "Pizza_6579", hindi: "पिज्जा", cat: "food" },
-        { file: "Places_6239", hindi: "स्थान", cat: "places" },
-        { file: "Plate_6741", hindi: "थाली", cat: "home" },
-        { file: "Playground_7086", hindi: "खेल का मैदान", cat: "places" },
-        { file: "Please_6391", hindi: "कृपया", cat: "common" },
-        { file: "Poha_6525", hindi: "पोहा", cat: "food" },
-        { file: "Popcorn_7109", hindi: "पॉपकॉर्न", cat: "food" },
-        { file: "Purple_6972", hindi: "बैंगनी", cat: "common" },
-        { file: "Puzzle_6771", hindi: "पहेली (Puzzle)", cat: "fun" },
-        { file: "Quiet please!_7286", hindi: "शांत रहें", cat: "common" },
-        { file: "Rabbit_6866", hindi: "खरगोश", cat: "animals" },
-        { file: "Rainy_7215", hindi: "बारिश", cat: "time" },
-        { file: "Red_6965", hindi: "लाल", cat: "common" },
-        { file: "Restaurant_6318", hindi: "होटल / रेस्तरां", cat: "places" },
-        { file: "Rice_6567", hindi: "चावल", cat: "food" },
-        { file: "Rickshaw_7056", hindi: "ऑटो रिक्शा", cat: "transport" },
-        { file: "Roti_6565", hindi: "रोटी", cat: "food" },
-        { file: "Run_7123", hindi: "दौड़ना", cat: "sports" },
-        { file: "Sabzi_6566", hindi: "सब्ज़ी", cat: "food" },
-        { file: "Sad_6375", hindi: "उदास", cat: "feelings" },
-        { file: "Salwar kameez_6435", hindi: "सलवार कमीज", cat: "daily" },
-        { file: "Sambhar_6535", hindi: "सांभर", cat: "food" },
-        { file: "Sandwich_6657", hindi: "सैंडविच", cat: "food" },
-        { file: "Saturday_7195", hindi: "शनिवार", cat: "time" },
-        { file: "School bus_7052", hindi: "स्कूल बस", cat: "transport" },
-        { file: "School_6315", hindi: "स्कूल", cat: "places" },
-        { file: "September_7206", hindi: "सितंबर", cat: "time" },
-        { file: "Shampoo_6466", hindi: "शैम्पू", cat: "daily" },
-        { file: "Sheep_6881", hindi: "भेड़", cat: "animals" },
-        { file: "Shirt_6429", hindi: "शर्ट", cat: "daily" },
-        { file: "Shoes_7015", hindi: "जूते", cat: "daily" },
-        { file: "Shorts_6434", hindi: "हाफ पैंट", cat: "daily" },
-        { file: "Shoulder_6930", hindi: "कंधा", cat: "body" },
-        { file: "Sick_6389", hindi: "बीमार", cat: "feelings" },
-        { file: "Sister_6285", hindi: "बहन", cat: "family" },
-        { file: "Sleep_6251", hindi: "सोना", cat: "daily" },
-        { file: "Sofa_7042", hindi: "सोफा", cat: "home" },
-        { file: "Soup_6581", hindi: "सूप", cat: "food" },
-        { file: "Sparrow_6901", hindi: "चिड़िया", cat: "animals" },
-        { file: "Speech therapy_6488", hindi: "स्पीच थेरेपी", cat: "medical" },
-        { file: "Spoon_6742", hindi: "चमच्च", cat: "home" },
-        { file: "Square_6979", hindi: "चौकोर", cat: "common" },
-        { file: "Stomach_6936", hindi: "पेट", cat: "body" },
-        { file: "Story book_7173", hindi: "कहानी की किताब", cat: "fun" },
-        { file: "Strawberry_6689", hindi: "स्ट्रॉबेरी", cat: "food" },
-        { file: "Sugar_6752", hindi: "चीनी", cat: "food" },
-        { file: "Summer_7222", hindi: "गर्मी", cat: "time" },
-        { file: "Sunday_7196", hindi: "रविवार", cat: "time" },
-        { file: "Sunny_7214", hindi: "धूप", cat: "time" },
-        { file: "Sweater_6436", hindi: "स्वेटर", cat: "daily" },
-        { file: "Sweets_6259", hindi: "मिठाई", cat: "food" },
-        { file: "Table_7029", hindi: "मेज़", cat: "home" },
-        { file: "Taxi_7060", hindi: "टैक्सी", cat: "transport" },
-        { file: "Tea_6728", hindi: "चाय", cat: "food" },
-        { file: "Teacher_6305", hindi: "शिक्षक", cat: "places" },
-        { file: "Temple_7069", hindi: "मंदिर", cat: "places" },
-        { file: "Tennis_6821", hindi: "टेनिस", cat: "sports" },
-        { file: "Thank you_6392", hindi: "धन्यवाद", cat: "common" },
-        { file: "Thursday_7193", hindi: "गुरुवार", cat: "time" },
-        { file: "Tiger_6871", hindi: "बाघ", cat: "animals" },
-        { file: "Tired_6386", hindi: "थका हुआ", cat: "feelings" },
-        { file: "Today_7182", hindi: "आज", cat: "time" },
-        { file: "Toilet_6247", hindi: "शौचालय", cat: "daily" },
-        { file: "Tomorrow_7184", hindi: "कल (आने वाला)", cat: "time" },
-        { file: "Tongue_6928", hindi: "जीभ", cat: "body" },
-        { file: "Train_7055", hindi: "ट्रेन", cat: "transport" },
-        { file: "Transport Modes_6279", hindi: "यातायात", cat: "transport" },
-        { file: "Tuesday_7191", hindi: "मंगलवार", cat: "time" },
-        { file: "Uncle_6286", hindi: "चाचा", cat: "family" },
-        { file: "Uniform_7014", hindi: "यूनिफॉर्म", cat: "daily" },
-        { file: "Upma_6526", hindi: "उपमा", cat: "food" },
-        { file: "Volleyball_6824", hindi: "वॉलीबॉल", cat: "sports" },
-        { file: "Wafers_6656", hindi: "वेफर्स", cat: "food" },
-        { file: "Walk_7122", hindi: "चलना", cat: "daily" },
-        { file: "Washing machine_7045", hindi: "वाशिंग मशीन", cat: "home" },
-        { file: "Water bottle_7009", hindi: "पानी की बोतल", cat: "home" },
-        { file: "Water_6707", hindi: "पानी", cat: "food" },
-        { file: "Watermelon_6692", hindi: "तरबूज", cat: "food" },
-        { file: "Wednesday_7192", hindi: "बुधवार", cat: "time" },
-        { file: "White_6967", hindi: "सफ़ेद", cat: "common" },
-        { file: "Window_7023", hindi: "खिड़की", cat: "home" },
-        { file: "Winter_7225", hindi: "सर्दी", cat: "time" },
-        { file: "Worried_6384", hindi: "चिंतित", cat: "feelings" },
-        { file: "Write_6856", hindi: "लिखना", cat: "daily" },
-        { file: "Yellow_6968", hindi: "पीला", cat: "common" },
-        { file: "Yesterday_7183", hindi: "कल (बीता हुआ)", cat: "time" },
-        { file: "Zebra_6885", hindi: "जेब्रा", cat: "animals" },
-        { file: "Zoo_6329", hindi: "चिड़ियाघर", cat: "places" }
+        // Context 1: Urgent Needs & Pain (🚨)
+        { file: "Emergency_6338", hindi: "आपातकाल / एमरजेंसी", cat: "urgent" },
+        { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat: "urgent" },
+        { file: "I am hurt_6340", hindi: "मुझे चोट लगी है", cat: "urgent" },
+        { file: "I feel sick_6341", hindi: "मैं बीमार हूँ", cat: "urgent" },
+        { file: "Danger_6350", hindi: "खतरा", cat: "urgent" },
+        { file: "Help_6241", hindi: "मदद चाहिए", cat: "urgent" },
+        { file: "I need a break_6397", hindi: "मुझे आराम चाहिए", cat: "urgent" },
+        { file: "I want to be alone_6407", hindi: "मुझे अकेला छोड़ दें", cat: "urgent" },
+
+        // Context 2: At the Dining Table / Meals (🍽️)
+        { file: "Water_6707", hindi: "पानी", cat: "dining" },
+        { file: "Water bottle_7009", hindi: "पानी की बोतल", cat: "dining" },
+        { file: "Tea_6728", hindi: "चाय", cat: "dining" },
+        { file: "Milk_6708", hindi: "दूध", cat: "dining" },
+        { file: "Roti_6565", hindi: "रोटी", cat: "dining" },
+        { file: "Rice_6567", hindi: "चावल", cat: "dining" },
+        { file: "Dal_6568", hindi: "दाल", cat: "dining" },
+        { file: "Sabzi_6566", hindi: "सब्ज़ी", cat: "dining" },
+        { file: "Aaloo Poori_6523", hindi: "आलू पूरी", cat: "dining" },
+        { file: "Paratha_6530", hindi: "पराठा", cat: "dining" },
+        { file: "Sweets_6259", hindi: "मिठाई", cat: "dining" },
+        { file: "Plate_6741", hindi: "थाली", cat: "dining" },
+        { file: "Spoon_6742", hindi: "चम्मच", cat: "dining" },
+
+        // Context 3: Daily Routine & Personal Care (🧼)
+        { file: "Toilet_6247", hindi: "शौचालय जाना है", cat: "care" },
+        { file: "Bathing_6248", hindi: "नहाना है", cat: "care" },
+        { file: "Comb hair_6461", hindi: "कंघी करना", cat: "care" },
+        { file: "Blow nose_6464", hindi: "नाक साफ करना", cat: "care" },
+        { file: "Shampoo_6466", hindi: "शैम्पू", cat: "care" },
+        { file: "Soap_6465", hindi: "साबुन", cat: "care" },
+        { file: "Cut nails_6463", hindi: "नाखून काटना", cat: "care" },
+        { file: "Sleep_6251", hindi: "सोना है", cat: "care" },
+
+        // Context 4: Social Interactions & Greetings (💬)
+        { file: "Hello_6361", hindi: "नमस्ते", cat: "social" },
+        { file: "Thank you_6392", hindi: "धन्यवाद", cat: "social" },
+        { file: "Please_6391", hindi: "कृपया", cat: "social" },
+        { file: "Bye_6362", hindi: "अलविदा", cat: "social" },
+        { file: "I am sorry_7277", hindi: "क्षमा करें", cat: "social" },
+        { file: "You are welcome_6393", hindi: "आपका स्वागत है", cat: "social" },
+        { file: "Excuse me_6399", hindi: "सुनिए", cat: "social" },
+        { file: "Quiet please!_7286", hindi: "शांत रहें", cat: "social" },
+
+        // Context 5: Medical Settings & Therapy (🏥)
+        { file: "Doctor_6307", hindi: "डॉक्टर", cat: "therapy" },
+        { file: "Nurse_6308", hindi: "नर्स", cat: "therapy" },
+        { file: "Medicine_6343", hindi: "दवा लेनी है", cat: "therapy" },
+        { file: "Bandage_6344", hindi: "पट्टी (Bandage)", cat: "therapy" },
+        { file: "Speech therapy_6488", hindi: "स्पीच थेरेपी", cat: "therapy" },
+        { file: "Exercises_6479", hindi: "व्यायाम / कसरत", cat: "therapy" },
+        { file: "Leg exercises_6486", hindi: "पैरों की कसरत", cat: "therapy" },
+        { file: "Hospital_6325", hindi: "अस्पताल", cat: "therapy" },
+
+        // Context 6: Home Objects & Comfort Controls (🏠)
+        { file: "Air conditioner_6477", hindi: "एसी (AC) चलाएं", cat: "home" },
+        { file: "Fan_7025", hindi: "पंखा चलाएं", cat: "home" },
+        { file: "Light_6470", hindi: "लाइट ऑन/ऑफ", cat: "home" },
+        { file: "Sofa_7042", hindi: "सोफे पर बैठना है", cat: "home" },
+        { file: "Bed_6472", hindi: "बिस्तर पर जाना है", cat: "home" },
+        { file: "Pillows_6473", hindi: "तकिया चाहिए", cat: "home" },
+        { file: "Blanket_6474", hindi: "कंबल चाहिए", cat: "home" },
+        { file: "Window_7023", hindi: "खिड़की खोलें/बंद करें", cat: "home" },
+        { file: "Door_7024", hindi: "दरवाजा खोलें", cat: "home" },
+        { file: "Television_7040", hindi: "टीवी (TV) देखना है", cat: "home" },
+
+        // Context 7: My Personal Status / Moods (🧠)
+        { file: "Happy_6374", hindi: "मैं खुश हूँ", cat: "status" },
+        { file: "Sad_6375", hindi: "मैं उदास हूँ", cat: "status" },
+        { file: "Angry_6376", hindi: "मैं नाराज़ हूँ", cat: "status" },
+        { file: "Worried_6384", hindi: "मैं चिंतित हूँ", cat: "status" },
+        { file: "Tired_6386", hindi: "मैं थक गया हूँ", cat: "status" },
+        { file: "Sick_6389", hindi: "मैं बीमार हूँ", cat: "status" },
+        { file: "Confused_6380", hindi: "मैं उलझन में हूँ", cat: "status" },
+        { file: "Hot_6387", hindi: "गर्मी लग रही है", cat: "status" },
+        { file: "Cold_6388", hindi: "ठंड लग रही है", cat: "status" },
+
+        // Context 8: Leisure & Activity Layouts (🧩)
+        { file: "Book_7170", hindi: "किताब पढ़नी है", cat: "leisure" },
+        { file: "Story book_7173", hindi: "कहानी की किताब", cat: "leisure" },
+        { file: "Write_6856", hindi: "लिखना है", cat: "leisure" },
+        { file: "Draw_6853", hindi: "चित्र बनाना है", cat: "leisure" },
+        { file: "Puzzle_6771", hindi: "पहेली खेलनी है", cat: "leisure" },
+        { file: "Chess_7282", hindi: "शतरंज खेलना है", cat: "leisure" },
+        { file: "Walk_7122", hindi: "टहलने जाना है", cat: "leisure" },
+        { file: "Park_6321", hindi: "पार्क जाना है", cat: "leisure" }
     ];
 
-    const categories = {
-        common: { label: "बातचीत", icon: "💬" },
-        feelings: { label: "भावनाएं", icon: "😊" },
-        family: { label: "परिवार", icon: "👨‍👩‍👧‍👦" },
-        food: { label: "भोजन", icon: "🍛" },
-        medical: { label: "स्वास्थ्य", icon: "🏥" },
-        daily: { label: "दिनचर्या", icon: "⏳" },
-        body: { label: "शरीर", icon: "💪" },
-        home: { label: "घर", icon: "🏠" },
-        places: { label: "स्थान", icon: "🗺️" },
-        transport: { label: "यातायात", icon: "🚗" },
-        sports: { label: "खेल", icon: "⚽" },
-        animals: { label: "जीव-जंतु", icon: "🦁" },
-        fun: { label: "मनोरंजन", icon: "🎨" }
+    const situationalCategories = {
+        urgent: { label: "ज़रूरी / दर्द", icon: "🚨" },
+        dining: { label: "भोजन समय", icon: "🍽️" },
+        care: { label: "दिनचर्या", icon: "🧼" },
+        social: { label: "बातचीत", icon: "💬" },
+        therapy: { label: "चिकित्सा", icon: "🏥" },
+        home: { label: "घर पर", icon: "🏠" },
+        status: { label: "मेरी स्थिति", icon: "🧠" },
+        leisure: { label: "मनोरंजन", icon: "🧩" }
     };
 
     function initAAC() {
@@ -595,8 +386,8 @@
     function renderSidebar() {
         const sidebar = document.getElementById('categorySidebar');
         sidebar.innerHTML = '';
-        Object.keys(categories).forEach(key => {
-            const cat = categories[key];
+        Object.keys(situationalCategories).forEach(key => {
+            const cat = situationalCategories[key];
             const btn = document.createElement('button');
             btn.className = `cat-btn ${currentCategory === key ? 'active' : ''}`;
             btn.id = `cat-${key}`;
@@ -666,9 +457,9 @@
     function handleImgError(imgElement) {
         imgElement.style.display = 'none';
         const fallback = document.createElement('div');
-        fallback.style.fontSize = '2.3rem';
+        fallback.style.fontSize = '2.5rem';
         fallback.style.fontWeight = '800';
-        fallback.style.color = '#94a3b8';
+        fallback.style.color = '#cbd5e1';
         fallback.style.height = '75%';
         fallback.style.display = 'flex';
         fallback.style.alignItems = 'center';
@@ -687,13 +478,10 @@
         filterCorpus();
     }
 
-    // --- INTEGRATED DUAL CONFIGURATION PROCESSOR ---
     function handleCardClick(hindiWord) {
         if (currentMode === 'basic') {
-            // Simple Mode: Direct, immediate single-press speech execution
             executeSpeech(hindiWord);
         } else {
-            // Conversational Mode: Construct sentence array structure
             structuralSentence.push(hindiWord);
             renderSentenceDisplay();
         }
@@ -731,7 +519,7 @@
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(phrase);
-            utterance.rate = 0.75; // Clinical auditory pacing matrix locked
+            utterance.rate = 0.70; // Clinical paced speech matrix for stroke survivors
             
             const voices = window.speechSynthesis.getVoices();
             const hindiVoice = voices.find(v => v.lang.includes('hi') || v.lang.includes('hi-IN'));
@@ -741,13 +529,10 @@
         }
     }
 
-    // Dynamic Engine Mode Toggler
     function setMode(mode) {
         currentMode = mode;
         document.getElementById('btnBasic').classList.toggle('active', mode === 'basic');
         document.getElementById('btnAdvanced').classList.toggle('active', mode === 'advanced');
-        
-        // Toggle visual sentence builder interface depending on system tier selection
         document.getElementById('sentenceBar').style.display = (mode === 'advanced') ? 'flex' : 'none';
         clearSentence();
     }
