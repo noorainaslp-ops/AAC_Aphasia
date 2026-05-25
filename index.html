@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Complete Asset Matrix</title>
+    <title>HearLink Clinical AAC Engine</title>
     <style>
         :root {
             --bg: #f8fafc; --text: #0f172a; --card-bg: #ffffff; --border: #cbd5e1;
@@ -83,7 +83,6 @@
     let currentPage = 1; let structuralSentence = [];
     const itemsPerPage = 8; 
 
-    // Fixed child core elements setup
     const childCore = [
         { file: "Help_6241", hindi: "मदद चाहिए", type: "social" },
         { file: "Please give me_6394", hindi: "चाहिए", type: "verb" },
@@ -98,7 +97,6 @@
     };
     const childFringeCategories = { toys: { label: "खिलौने", icon: "🧸" }, food: { label: "खाना", icon: "🍎" }, play: { label: "क्रियाएं", icon: "🏃" }, feelings: { label: "भावनाएं", icon: "😄" } };
 
-    // Strict verified file list including fallback variations for multi-id safety
     const defaultMasterCorpus = [
         { file: "Emergency_6338", hindi: "आपातकाल", cat_adult: "urgent", type: "social" },
         { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat_adult: "urgent", type: "descriptor" },
@@ -228,38 +226,14 @@
                 if (item.type === 'descriptor') card.style.backgroundColor = 'var(--fitz-descriptor)';
                 if (item.type === 'noun') card.style.backgroundColor = 'var(--fitz-noun)';
             }
-            const folderPrefix = "idc_symbols"; 
-            
-            // AUTOMATED PERMISSION FALLBACK INJECTOR:
-            // This loop forces the browser to match either clean strings or explicit multi-ID numbers automatically
-            let imageSrc = `./${folderPrefix}/${encodeURIComponent(item.file.trim())}.svg`;
-            
+            const folderPrefix = "idc_symbols"; const imageSrc = `./${folderPrefix}/${encodeURIComponent(item.file.trim())}.svg`;
             card.onclick = () => handleCardClick(item.hindi);
-            card.innerHTML += `<img class="aac-image" src="${imageSrc}" onerror="handleImgFallback(this, '${item.file}')" alt="${item.hindi}"><div class="aac-label">${item.hindi}</div>`;
+            card.innerHTML += `<img class="aac-image" src="${imageSrc}" onerror="handleImgError(this)" alt="${item.hindi}"><div class="aac-label">${item.hindi}</div>`;
             grid.appendChild(card);
         });
     }
 
-    // Advanced dynamic asset lookup sequence to handle stripped integer extensions smoothly
-    function handleImgFallback(imgElement, originalFile) {
-        const folderPrefix = "idc_symbols";
-        let cleanName = originalFile.split('_')[0].strip || originalFile.split('_')[0];
-        
-        // Secondary execution attempt using base name string parameter matches
-        if (!imgElement.dataset.retried) {
-            imgElement.dataset.retried = "true";
-            imgElement.src = `./${folderPrefix}/${encodeURIComponent(cleanName)}.svg`;
-        } else {
-            // Final defensive rendering slot if everything fails
-            imgElement.style.display = 'none';
-            const fallback = document.createElement('div');
-            fallback.style.fontSize = '2.3rem'; fallback.style.color = '#cbd5e1'; fallback.style.height = '70%';
-            fallback.style.display = 'flex'; fallback.style.alignItems = 'center'; fallback.style.justifyContent = 'center';
-            fallback.textContent = (activePopulation === 'adult') ? '🖼️' : '🎨';
-            imgElement.parentNode.insertBefore(fallback, imgElement);
-        }
-    }
-
+    function handleImgError(imgElement) { imgElement.style.display = 'none'; const fallback = document.createElement('div'); fallback.style.fontSize = '2.3rem'; fallback.style.color = '#cbd5e1'; fallback.style.height = '70%'; fallback.style.display = 'flex'; fallback.style.alignItems = 'center'; fallback.style.justifyContent = 'center'; fallback.textContent = (activePopulation === 'adult') ? '🖼️' : '🎨'; imgElement.parentNode.insertBefore(fallback, imgElement); }
     function resetToFactoryBaseline() { localStorage.clear(); location.reload(true); }
 
     function handleCardClick(word) { if (activeCommunicationTier === 'basic') { executeAcousticFeedback(word); } else { structuralSentence.push(word); renderSentenceDisplay(); } }
@@ -268,29 +242,47 @@
     function clearSentence() { structuralSentence = []; document.getElementById('sentenceDisplay').innerHTML = ''; }
     function speakSentence() { if (structuralSentence.length === 0) return; executeAcousticFeedback(structuralSentence.join(' ')); }
 
+    // --- ENHANCED HARDWARE VOICELOCK DRIVER ENGINE ---
     let preferredHindiVoice = null;
+
     function loadSystemVoices() {
         if ('speechSynthesis' in window) {
             const voices = window.speechSynthesis.getVoices();
-            let target = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN') || voices.find(v => v.name.includes('Google हिन्दी'));
-            if (target) preferredHindiVoice = target;
+            // Force precise regional priority mapping
+            let target = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN');
+            if (!target) target = voices.find(v => v.name.includes('Google हिन्दी'));
+            if (!target) target = voices.find(v => v.name.toLowerCase().includes('hindi'));
+            
+            if (target) {
+                preferredHindiVoice = target;
+                console.log("Native Hindi Driver Lock Secured: " + target.name);
+            }
         }
     }
 
     function executeAcousticFeedback(phrase) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel(); 
+            
             let nativeText = phrase.replace(/[A-Za-z]/g, '').replace(/[\\/\\(\\)]/g, ' ').replace(/\\s+/g, ' ').trim();
             if (!nativeText) nativeText = phrase; 
+            
             const utterance = new SpeechSynthesisUtterance(nativeText); 
-            utterance.volume = 1.0; utterance.lang = 'hi-IN';
+            utterance.volume = 1.0;
+            utterance.lang = 'hi-IN'; // Force system driver language matching parameters
+            
+            // Adjust clinical pacing metrics
             utterance.rate = (activePopulation === 'adult') ? 0.65 : 0.72; 
             utterance.pitch = (activePopulation === 'adult') ? 0.95 : 1.25;
+
+            // Re-verify the selection line lock values right before execution
             if (!preferredHindiVoice) loadSystemVoices();
             if (preferredHindiVoice) utterance.voice = preferredHindiVoice;
+
             window.speechSynthesis.speak(utterance);
         }
     }
+    
     function changePage(dir) { currentPage += dir; renderGridDisplay(); }
     function handleSearch() { currentPage = 1; filterDataCorpus(); }
     function setPopulation(pop) { activePopulation = pop; document.getElementById('pop-adult').classList.toggle('active', pop === 'adult'); document.getElementById('pop-child').classList.toggle('active', pop === 'child'); document.getElementById('brandSub').textContent = (pop === 'adult') ? "Context AAC" : "Child Development"; currentCategory = (pop === 'adult') ? 'urgent' : 'toys'; currentPage = 1; document.getElementById('searchInput').value = ''; initSystem(); }
