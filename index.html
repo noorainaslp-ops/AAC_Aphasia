@@ -3,17 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink Clinical AAC Engine</title>
+    <title>HearLink AAC - Fixed Clinical Grid</title>
     <style>
         :root {
             --bg: #f8fafc; --text: #0f172a; --card-bg: #ffffff; --border: #cbd5e1;
             --primary: #0284c7; --primary-light: #e0f2fe; --urgent-color: #ef4444;
-            
-            /* Clinical Fitzgerald Key Spacing Colors (Pediatric Syntax) */
-            --fitz-social: #ffffff; 
-            --fitz-verb: #dcfce7;   
-            --fitz-descriptor: #e0f2fe; 
-            --fitz-noun: #fef9c3;   
+            --fitz-social: #ffffff; --fitz-verb: #dcfce7; --fitz-descriptor: #e0f2fe; --fitz-noun: #fef9c3;
         }
         body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; user-select: none; }
         header { background: var(--card-bg); border-bottom: 2px solid var(--border); padding: 5px 20px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; }
@@ -27,23 +22,18 @@
         .search-container { padding: 8px 20px; background: var(--card-bg); border-bottom: 2px solid var(--border); }
         .search-input { width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; font-weight: 700; box-sizing: border-box; }
         .search-input:focus { border-color: var(--primary); outline: none; }
-        
-        /* Sentence Level Display Strip Layout */
         #sentenceBar { background: var(--card-bg); border-bottom: 2px solid var(--border); padding: 10px 20px; display: flex; gap: 12px; align-items: center; min-height: 75px; box-sizing: border-box; }
         .sentence-display { flex: 1; background: var(--bg); border: 2px dashed var(--border); border-radius: 14px; min-height: 50px; display: flex; align-items: center; padding: 4px 12px; gap: 8px; overflow-x: auto; }
         .phrase-chip { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 1rem; display: flex; align-items: center; gap: 6px; }
         .phrase-chip .remove-x { cursor: pointer; font-weight: 900; color: #38bdf8; }
         .action-btn { background: #10b981; color: white; border: none; padding: 0 20px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 1rem; height: 50px; }
         .clear-btn { background: #64748b; }
-        
         .workspace { display: flex; flex: 1; overflow: hidden; }
         .sidebar { width: 150px; background: var(--card-bg); border-right: 2px solid var(--border); display: flex; flex-direction: column; gap: 8px; padding: 12px 6px; overflow-y: auto; }
         .cat-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 4px; border: 2px solid var(--border); border-radius: 14px; background: #f8fafc; cursor: pointer; font-size: 0.9rem; font-weight: 800; color: #475569; gap: 4px; }
         .cat-btn.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
         #cat-urgent.active { background: #fee2e2; border-color: var(--urgent-color); color: var(--urgent-color); }
         .grid-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; justify-content: space-between; }
-        
-        /* STRICT 2x4 VISUAL MATRIX (EXACTLY 8 STIMULI SLOTS PER PAGE) */
         .aac-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 15px; flex: 1; max-height: 480px; }
         .aac-card { background: var(--card-bg); border: 3px solid var(--border); border-radius: 20px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 1 / 1; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.01); text-align: center; box-sizing: border-box; position: relative; }
         .aac-card:active { transform: scale(0.95); }
@@ -65,21 +55,17 @@
             </div>
             <button class="toggle-btn" style="border:2px solid var(--border);" onclick="resetToFactoryBaseline()">🔄 रीसेट डेटा (Reset)</button>
         </div>
-        
         <div class="toggle-group">
             <button id="tier-basic" class="toggle-btn active" onclick="setCommunicationTier('basic')">शब्द मोड (Word Level)</button>
             <button id="tier-advanced" class="toggle-btn" onclick="setCommunicationTier('advanced')">वाक्य मोड (Sentence Level)</button>
         </div>
     </header>
-    
     <div class="search-container"><input type="text" id="searchInput" class="search-input" placeholder="सिम्बल्स में खोजें..." oninput="handleSearch()"></div>
-    
     <div id="sentenceBar" style="display: none;">
         <button class="action-btn clear-btn" onclick="clearSentence()">हटाएं</button>
         <div id="sentenceDisplay" class="sentence-display"></div>
         <button class="action-btn" onclick="speakSentence()">🗣️ वाक्य बोलें</button>
     </div>
-    
     <div class="workspace">
         <div class="sidebar" id="categorySidebar"></div>
         <div class="grid-container">
@@ -97,7 +83,7 @@
     let currentPage = 1; let structuralSentence = [];
     const itemsPerPage = 8; 
 
-    // Core Child Vocabulary Setup mapping directly to valid local svg identifiers
+    // FIXED CHILD MOTOR PLANNING CORE Vocabulary Array with exact Jellow SVG numerical ids
     const childCore = [
         { file: "Help_6241", hindi: "मदद चाहिए", type: "social" },
         { file: "Please give me_6394", hindi: "चाहिए", type: "verb" },
@@ -112,8 +98,8 @@
     };
     const childFringeCategories = { toys: { label: "खिलौने", icon: "🧸" }, food: { label: "खाना", icon: "🍎" }, play: { label: "क्रियाएं", icon: "🏃" }, feelings: { label: "भावनाएं", icon: "😄" } };
 
-    // --- PRISTINE EXPLICIT VOCABULARY REGISTRY ---
-    const masterCorpus = [
+    // --- EXACT VERIFIED VECTOR MAP REGISTRY ---
+    const defaultMasterCorpus = [
         // Category 1: Urgent / ज़रूरी दर्द
         { file: "Emergency_6338", hindi: "आपातकाल", cat_adult: "urgent", type: "social" },
         { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat_adult: "urgent", type: "descriptor" },
@@ -132,8 +118,11 @@
         { file: "Rice_6567", hindi: "चावल", cat_adult: "dining", cat_child: "food", type: "noun" },
         { file: "Dal_6568", hindi: "दाल", cat_adult: "dining", cat_child: "food", type: "noun" },
         { file: "Sabzi_6566", hindi: "सब्ज़ी", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Chicken_6921", hindi: "चिकन खाना", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Mutton_6525", hindi: "मटन खाना", cat_adult: "dining", type: "noun" },
+        { file: "Chicken_6921", hindi: "चिकन", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Mutton_6525", hindi: "मटन", cat_adult: "dining", type: "noun" },
+        { file: "Apple_6683", hindi: "सेब", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Biscuits_6653", hindi: "बिस्कुट", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Juice_6709", hindi: "जूस", cat_adult: "dining", cat_child: "food", type: "noun" },
         
         // Category 3: Personal Care / दिनचर्या
         { file: "Toilet_6247", hindi: "शौचालय जाना है", cat_adult: "care", type: "verb" },
@@ -168,13 +157,13 @@
         { file: "Activities_6270", hindi: "गतिविधियां", cat_adult: "home", type: "noun" },
         { file: "Arts and crafts_6850", hindi: "आर्ट और क्राफ्ट", cat_adult: "home", type: "noun" },
 
-        // --- PEDIATRIC SYMBOL TOY STORES ---
+        // --- PEDIATRIC RELEVANT TOYS STORES OVERRIDES ---
         { file: "Doll_6778", hindi: "गुड़िया", cat_child: "toys", type: "noun" },
         { file: "Car_7053", hindi: "गाड़ी", cat_child: "toys", type: "noun" },
         { file: "Ball_7118", hindi: "गेँद", cat_child: "toys", type: "noun" },
         { file: "Blocks_6782", hindi: "ब्लॉक्स", cat_child: "toys", type: "noun" },
 
-        // Pediatric Fringe State Allocations
+        // Pediatric Actions & Feelings
         { file: "Toilet_6247", hindi: "शौचालय जाना है", cat_child: "play", type: "verb" },
         { file: "Sleep_6251", hindi: "सोना है", cat_child: "play", type: "verb" },
         { file: "Activities_6270", hindi: "गतिविधियां", cat_child: "play", type: "noun" },
@@ -184,6 +173,8 @@
         { file: "I feel sick_6341", hindi: "मैं बीमार हूँ", cat_child: "feelings", type: "descriptor" },
         { file: "I need a break_6397", hindi: "मुझे आराम चाहिए", cat_child: "feelings", type: "social" }
     ];
+
+    let masterCorpus = defaultMasterCorpus; // Hard lock registry connection to override cache blocks
 
     function initSystem() { renderSidebar(); filterDataCorpus(); }
 
@@ -261,7 +252,6 @@
     function clearSentence() { structuralSentence = []; document.getElementById('sentenceDisplay').innerHTML = ''; }
     function speakSentence() { if (structuralSentence.length === 0) return; executeAcousticFeedback(structuralSentence.join(' ')); }
 
-    // --- ACCENT PROCESSOR ROUTING PROTOCOL FOR hi-IN DISPERSION ---
     function executeAcousticFeedback(phrase) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel(); 
@@ -269,6 +259,7 @@
             if (!nativeText) nativeText = phrase; 
             const utterance = new SpeechSynthesisUtterance(nativeText); 
             utterance.rate = (activePopulation === 'adult') ? 0.70 : 0.72; 
+            utterance.pitch = (activePopulation === 'adult') ? 1.0 : 1.25;
             const findTrueHindiVoice = () => {
                 const voices = window.speechSynthesis.getVoices();
                 return voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN') || voices.find(v => v.name.includes('Google हिन्दी'));
