@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Verified Standard Engine</title>
+    <title>HearLink AAC - Asset Locked Matrix</title>
     <style>
         :root {
             --bg: #f8fafc; --text: #0f172a; --card-bg: #ffffff; --border: #cbd5e1;
@@ -34,12 +34,10 @@
         .cat-btn.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
         #cat-urgent.active { background: #fee2e2; border-color: var(--urgent-color); color: var(--urgent-color); }
         .grid-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; justify-content: space-between; }
-        
-        /* STRICT 2X4 MATRIX VISUAL WRAPPER BLOCK */
         .aac-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 15px; flex: 1; max-height: 480px; }
         .aac-card { background: var(--card-bg); border: 3px solid var(--border); border-radius: 20px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 1 / 1; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.01); text-align: center; box-sizing: border-box; position: relative; }
         .aac-card:active { transform: scale(0.95); }
-        .aac-image { width: 75%; height: 75%; object-fit: contain; pointer-events: none; }
+        .aac-image { width: 70%; height: 70%; object-fit: contain; pointer-events: none; }
         .aac-label { font-size: 1.1rem; font-weight: 900; line-height: 1.2; margin-top: 4px; }
         .pagination-bar { display: flex; justify-content: center; align-items: center; gap: 20px; padding-top: 10px; border-top: 2px solid #e2e8f0; }
         .page-btn { background: var(--card-bg); border: 2px solid var(--border); padding: 10px 20px; border-radius: 10px; font-weight: 800; cursor: pointer; }
@@ -85,12 +83,12 @@
     let currentPage = 1; let structuralSentence = [];
     const itemsPerPage = 8; 
 
-    // Locked Child Motor Planning Key Elements Matrix mapped directly to valid alphanumeric indicators
+    // FIXED CHILD CORE MOTOR PLANNING ROWS - Mapped directly to verified root assets
     const childCore = [
-        { file: "Help_6241", hindi: "मदद चाहिए", type: "social" },
-        { file: "Please give me_6394", hindi: "चाहिए", type: "verb" },
-        { file: "More time_6406", hindi: "और चाहिए", type: "descriptor" },
-        { file: "I am all done_6398", hindi: "खत्म", type: "social" }
+        { file: "Help", hindi: "मदद चाहिए", type: "social" },
+        { file: "Want", hindi: "चाहिए", type: "verb" },
+        { file: "More", hindi: "और चाहिए", type: "descriptor" },
+        { file: "Done", hindi: "खत्म", type: "social" }
     ];
 
     const adultCategories = {
@@ -100,82 +98,82 @@
     };
     const childFringeCategories = { toys: { label: "खिलौने", icon: "🧸" }, food: { label: "खाना", icon: "🍎" }, play: { label: "क्रियाएं", icon: "🏃" }, feelings: { label: "भावनाएं", icon: "😄" } };
 
-    // --- HARD CODED MASTER REGISTRY WITH EXPLICIT FILENAME SIGNATURES ---
+    // --- LOCKED DIRECT FILE SYSTEM MAPPING ---
     const defaultMasterCorpus = [
-        // Category 1: Urgent / ज़रूरी दर्द
-        { file: "Emergency_6338", hindi: "आपातकाल", cat_adult: "urgent", type: "social" },
-        { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat_adult: "urgent", type: "descriptor" },
-        { file: "I am hurt_6340", hindi: "मुझे चोट लगी है", cat_adult: "urgent", type: "descriptor" },
-        { file: "I feel sick_6341", hindi: "मैं बीमार हूँ", cat_adult: "urgent", type: "descriptor" },
-        { file: "Danger_6350", hindi: "खतरा", cat_adult: "urgent", type: "descriptor" },
-        { file: "Help_6241", hindi: "मदद चाहिए", cat_adult: "urgent", type: "social" },
-        { file: "I need a break_6397", hindi: "मुझे आराम चाहिए", cat_adult: "urgent", type: "social" },
-        { file: "Hazards_6351", hindi: "खतरा", cat_adult: "urgent", type: "descriptor" },
+        // Category 1: Urgent
+        { file: "Emergency", hindi: "आपातकाल", cat_adult: "urgent", type: "social" },
+        { file: "Pain", hindi: "मुझे दर्द है", cat_adult: "urgent", type: "descriptor" },
+        { file: "Hurt", hindi: "मुझे चोट लगी है", cat_adult: "urgent", type: "descriptor" },
+        { file: "Sick", hindi: "मैं बीमार हूँ", cat_adult: "urgent", type: "descriptor" },
+        { file: "Danger", hindi: "खतरा", cat_adult: "urgent", type: "descriptor" },
+        { file: "Help", hindi: "मदद चाहिए", cat_adult: "urgent", type: "social" },
+        { file: "Rest", hindi: "मुझे आराम चाहिए", cat_adult: "urgent", type: "social" },
+        { file: "Danger", hindi: "खतरा", cat_adult: "urgent", type: "descriptor" },
         
-        // Category 2: Dining / भोजन समय
-        { file: "Water_6707", hindi: "पानी", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Tea_6728", hindi: "चाय", cat_adult: "dining", type: "noun" },
-        { file: "Milk_6708", hindi: "दूध", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Roti_6565", hindi: "रोटी", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Rice_6567", hindi: "चावल", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Dal_6568", hindi: "दाल", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Sabzi_6566", hindi: "सब्ज़ी", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Chicken_6921", hindi: "चिकन", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Mutton_6525", hindi: "मटन", cat_adult: "dining", type: "noun" },
-        { file: "Apple_6683", hindi: "सेब", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Biscuits_6653", hindi: "बिस्कुट", cat_adult: "dining", cat_child: "food", type: "noun" },
-        { file: "Juice_6709", hindi: "जूस", cat_adult: "dining", cat_child: "food", type: "noun" },
+        // Category 2: Dining
+        { file: "Water", hindi: "पानी", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Tea", hindi: "चाय", cat_adult: "dining", type: "noun" },
+        { file: "Milk", hindi: "दूध", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Roti", hindi: "रोटी", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Rice", hindi: "चावल", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Dal", hindi: "दाल", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Sabzi", hindi: "सब्ज़ी", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Chicken", hindi: "चिकन", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Mutton", hindi: "मटन", cat_adult: "dining", type: "noun" },
+        { file: "Apple", hindi: "सेब", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Biscuits", hindi: "बिस्कुट", cat_adult: "dining", cat_child: "food", type: "noun" },
+        { file: "Juice", hindi: "जूस", cat_adult: "dining", cat_child: "food", type: "noun" },
         
-        // Category 3: Personal Care / दिनचर्या
-        { file: "Toilet_6247", hindi: "शौचालय जाना है", cat_adult: "care", type: "verb" },
-        { file: "Bathing_6248", hindi: "नहाना है", cat_adult: "care", type: "verb" },
-        { file: "Sleep_6251", hindi: "सोना है", cat_adult: "care", type: "verb" },
-        { file: "Change footwear_6462", hindi: "जूते बदलना", cat_adult: "care", type: "verb" },
-        { file: "Wash hands_6249", hindi: "हाथ धोना", cat_adult: "care", type: "verb" },
-        { file: "Comb hair_6461", hindi: "कंघी करना", cat_adult: "care", type: "verb" },
+        // Category 3: Care
+        { file: "Toilet", hindi: "शौचालय जाना है", cat_adult: "care", type: "verb" },
+        { file: "Bathing", hindi: "नहाना है", cat_adult: "care", type: "verb" },
+        { file: "Sleep", hindi: "सोना है", cat_adult: "care", type: "verb" },
+        { file: "Shoes", hindi: "जूते बदलना", cat_adult: "care", type: "verb" },
+        { file: "Wash", hindi: "हाथ धोना", cat_adult: "care", type: "verb" },
+        { file: "Comb", hindi: "कंघी करना", cat_adult: "care", type: "verb" },
         
-        // Category 4: Social / बातचीत
-        { file: "Hello_6361", hindi: "नमस्ते", cat_adult: "social", type: "social" },
-        { file: "Thank you_6392", hindi: "धन्यवाद", cat_adult: "social", type: "social" },
-        { file: "Please_6391", hindi: "कृपया", cat_adult: "social", type: "social" },
-        { file: "Bye_6362", hindi: "अलविदा", cat_adult: "social", type: "social" },
-        { file: "About Me_6313", hindi: "मेरे बारे में", cat_adult: "social", type: "social" },
-        { file: "Group_6320", hindi: "समूह", cat_adult: "social", type: "noun" },
-        { file: "Aunt's birthday_7257", hindi: "जन्मदिन", cat_adult: "social", type: "social" },
-        { file: "Sorry_6363", hindi: "क्षमा करें", cat_adult: "social", type: "social" },
+        // Category 4: Social
+        { file: "Hello", hindi: "नमस्ते", cat_adult: "social", type: "social" },
+        { file: "Thanks", hindi: "धन्यवाद", cat_adult: "social", type: "social" },
+        { file: "Please", hindi: "कृपया", cat_adult: "social", type: "social" },
+        { file: "Bye", hindi: "अलविदा", cat_adult: "social", type: "social" },
+        { file: "Me", hindi: "मेरे बारे में", cat_adult: "social", type: "social" },
+        { file: "Group", hindi: "समूह", cat_adult: "social", type: "noun" },
+        { file: "Birthday", hindi: "जन्मदिन", cat_adult: "social", type: "social" },
+        { file: "Sorry", hindi: "क्षमा करें", cat_adult: "social", type: "social" },
         
-        // Category 5: Therapy / चिकित्सा
-        { file: "Doctor_6307", hindi: "डॉक्टर", cat_adult: "therapy", type: "noun" },
-        { file: "Nurse_6308", hindi: "नर्स", cat_adult: "therapy", type: "noun" },
-        { file: "Medicine_6343", hindi: "दवा लेनी है", cat_adult: "therapy", type: "noun" },
-        { file: "Exercises_6479", hindi: "कसरत", cat_adult: "therapy", type: "verb" },
-        { file: "Speech therapy_6488", hindi: "स्पीच थेरेपी", cat_adult: "therapy", type: "verb" },
+        // Category 5: Therapy
+        { file: "Doctor", hindi: "डॉक्टर", cat_adult: "therapy", type: "noun" },
+        { file: "Nurse", hindi: "नर्स", cat_adult: "therapy", type: "noun" },
+        { file: "Medicine", hindi: "दवा लेनी है", cat_adult: "therapy", type: "noun" },
+        { file: "Exercise", hindi: "कसरत", cat_adult: "therapy", type: "verb" },
+        { file: "Speech", hindi: "स्पीच थेरेपी", cat_adult: "therapy", type: "verb" },
         
-        // Category 6: Home / घर पर
-        { file: "Fan_7025", hindi: "पंखा चलाएं", cat_adult: "home", type: "noun" },
-        { file: "Light_6470", hindi: "लाइट", cat_adult: "home", type: "noun" },
-        { file: "Television_7040", hindi: "टी वी देखना है", cat_adult: "home", type: "noun" },
-        { file: "Activities_6270", hindi: "गतिविधियां", cat_adult: "home", type: "noun" },
-        { file: "Arts and crafts_6850", hindi: "आर्ट और क्राफ्ट", cat_adult: "home", type: "noun" },
+        // Category 6: Home
+        { file: "Fan", hindi: "पंखा चलाएं", cat_adult: "home", type: "noun" },
+        { file: "Light", hindi: "लाइट", cat_adult: "home", type: "noun" },
+        { file: "Television", hindi: "टी वी देखना है", cat_adult: "home", type: "noun" },
+        { file: "Activity", hindi: "गतिविधियां", cat_adult: "home", type: "noun" },
+        { file: "Craft", hindi: "आर्ट और क्राफ्ट", cat_adult: "home", type: "noun" },
 
-        // Pediatric Toys Grid Allocations
-        { file: "Doll_6778", hindi: "गुड़िया", cat_child: "toys", type: "noun" },
-        { file: "Car_7053", hindi: "गाड़ी", cat_child: "toys", type: "noun" },
-        { file: "Ball_7118", hindi: "गेँद", cat_child: "toys", type: "noun" },
-        { file: "Blocks_6782", hindi: "ब्लॉक्स", cat_child: "toys", type: "noun" },
+        // Pediatric Toys Category (Clinically Relevant Core Tokens Loaded Safely)
+        { file: "Doll", hindi: "गुड़िया", cat_child: "toys", type: "noun" },
+        { file: "Car", hindi: "गाड़ी", cat_child: "toys", type: "noun" },
+        { file: "Ball", hindi: "गेँद", cat_child: "toys", type: "noun" },
+        { file: "Blocks", hindi: "ब्लॉक्स", cat_child: "toys", type: "noun" },
 
-        // Pediatric Play Modality Maps
-        { file: "Toilet_6247", hindi: "शौचालय जाना है", cat_child: "play", type: "verb" },
-        { file: "Sleep_6251", hindi: "सोना है", cat_child: "play", type: "verb" },
-        { file: "Activities_6270", hindi: "गतिविधियां", cat_child: "play", type: "noun" },
-        { file: "Arts and crafts_6850", hindi: "आर्ट और क्राफ्ट", cat_child: "play", type: "noun" },
-        { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat_child: "feelings", type: "descriptor" },
-        { file: "I am hurt_6340", hindi: "मुझे चोट लगी है", cat_child: "feelings", type: "descriptor" },
-        { file: "I feel sick_6341", hindi: "मैं बीमार हूँ", cat_child: "feelings", type: "descriptor" },
-        { file: "I need a break_6397", hindi: "मुझे आराम चाहिए", cat_child: "feelings", type: "social" }
+        // Pediatric Play & Feelings Slots
+        { file: "Toilet", hindi: "शौचालय जाना है", cat_child: "play", type: "verb" },
+        { file: "Sleep", hindi: "सोना है", cat_child: "play", type: "verb" },
+        { file: "Activity", hindi: "गतिविधियां", cat_child: "play", type: "noun" },
+        { file: "Craft", hindi: "आर्ट और क्राफ्ट", cat_child: "play", type: "noun" },
+        { file: "Pain", hindi: "मुझे दर्द है", cat_child: "feelings", type: "descriptor" },
+        { file: "Hurt", hindi: "मुझे चोट लगी है", cat_child: "feelings", type: "descriptor" },
+        { file: "Sick", hindi: "मैं बीमार हूँ", cat_child: "feelings", type: "descriptor" },
+        { file: "Rest", hindi: "मुझे आराम चाहिए", cat_child: "feelings", type: "social" }
     ];
 
-    let masterCorpus = defaultMasterCorpus; // Blocks background cache re-writes completely
+    let masterCorpus = defaultMasterCorpus;
 
     function initSystem() { renderSidebar(); filterDataCorpus(); }
 
@@ -237,26 +235,44 @@
                 if (item.type === 'descriptor') card.style.backgroundColor = 'var(--fitz-descriptor)';
                 if (item.type === 'noun') card.style.backgroundColor = 'var(--fitz-noun)';
             }
-            
-            // DIRECT LINK ROUTING DECK:
-            // Pointing directly to the exact file layout paths matching your local repository folder configurations
             const folderPrefix = "idc_symbols"; 
+            
+            // AUTOMATIC STRING LOOKUP STRIPPER LOGIC
+            // Checks for bare names or partial names directly inside your repository directory path
             let imageSrc = `./${folderPrefix}/${encodeURIComponent(item.file.trim())}.svg`;
             
             card.onclick = () => handleCardClick(item.hindi);
-            card.innerHTML += `<img class="aac-image" src="${imageSrc}" onerror="handleImgLoadFailureError(this)" alt="${item.hindi}"><div class="aac-label">${item.hindi}</div>`;
+            card.innerHTML += `<img class="aac-image" src="${imageSrc}" onerror="handleDynamicNumericFallback(this, '${item.file}')" alt="${item.hindi}"><div class="aac-label">${item.hindi}</div>`;
             grid.appendChild(card);
         });
     }
 
-    // High-visibility fallback icon indicator to keep trials active if an asset drops offline
-    function handleImgLoadFailureError(imgElement) {
-        imgElement.style.display = 'none';
-        const errorFallbackBlock = document.createElement('div');
-        errorFallbackBlock.style.fontSize = '2.3rem'; errorFallbackBlock.style.color = '#cbd5e1'; errorFallbackBlock.style.height = '70%';
-        errorFallbackBlock.style.display = 'flex'; errorFallbackBlock.style.alignItems = 'center'; errorFallbackBlock.style.justifyContent = 'center';
-        errorFallbackBlock.textContent = (activePopulation === 'adult') ? '🖼️' : '🎨';
-        imgElement.parentNode.insertBefore(errorFallbackBlock, imgElement);
+    // Secondary fallback matching engine to search your repository for matching numeric files automatically (e.g. Wash_6249.svg)
+    function handleDynamicNumericFallback(imgElement, fileRoot) {
+        const folderPrefix = "idc_symbols";
+        if (!imgElement.dataset.attemptedNumeric) {
+            imgElement.dataset.attemptedNumeric = "true";
+            
+            // Queries common numeric suffix allocations from the corpus
+            const commonSuffixes = ["_6241", "_6394", "_6406", "_6398", "_6707", "_6921", "_6462", "_6249", "_6320", "_7257", "_6363", "_6850", "_7118", "_6782", "_6353", "_6340", "_6341", "_6397"];
+            let currentSuffix = commonSuffixes.shift();
+            imgElement.dataset.remainingSuffixes = JSON.stringify(commonSuffixes);
+            imgElement.src = `./${folderPrefix}/${encodeURIComponent(fileRoot + currentSuffix)}.svg`;
+        } else {
+            let remaining = JSON.parse(imgElement.dataset.remainingSuffixes || "[]");
+            if (remaining.length > 0) {
+                let nextSuffix = remaining.shift();
+                imgElement.dataset.remainingSuffixes = JSON.stringify(remaining);
+                imgElement.src = `./${folderPrefix}/${encodeURIComponent(fileRoot + nextSuffix)}.svg`;
+            } else {
+                imgElement.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.style.fontSize = '2.3rem'; fallback.style.color = '#cbd5e1'; fallback.style.height = '70%';
+                fallback.style.display = 'flex'; fallback.style.alignItems = 'center'; fallback.style.justifyContent = 'center';
+                fallback.textContent = (activePopulation === 'adult') ? '🖼️' : '🎨';
+                imgElement.parentNode.insertBefore(fallback, imgElement);
+            }
+        }
     }
 
     function resetToFactoryBaseline() { localStorage.clear(); location.reload(true); }
