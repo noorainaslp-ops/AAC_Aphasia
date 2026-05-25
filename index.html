@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HearLink AAC - Fixed Clinical Grid</title>
+    <title>HearLink Clinical AAC Engine</title>
     <style>
         :root {
             --bg: #f8fafc; --text: #0f172a; --card-bg: #ffffff; --border: #cbd5e1;
@@ -83,7 +83,7 @@
     let currentPage = 1; let structuralSentence = [];
     const itemsPerPage = 8; 
 
-    // FIXED CHILD MOTOR PLANNING CORE Vocabulary Array with exact Jellow SVG numerical ids
+    // Locked Child Core Vocabulary Matrix Layout
     const childCore = [
         { file: "Help_6241", hindi: "मदद चाहिए", type: "social" },
         { file: "Please give me_6394", hindi: "चाहिए", type: "verb" },
@@ -98,9 +98,8 @@
     };
     const childFringeCategories = { toys: { label: "खिलौने", icon: "🧸" }, food: { label: "खाना", icon: "🍎" }, play: { label: "क्रियाएं", icon: "🏃" }, feelings: { label: "भावनाएं", icon: "😄" } };
 
-    // --- EXACT VERIFIED VECTOR MAP REGISTRY ---
+    // Explicit Clinical Registry Setup Maps
     const defaultMasterCorpus = [
-        // Category 1: Urgent / ज़रूरी दर्द
         { file: "Emergency_6338", hindi: "आपातकाल", cat_adult: "urgent", type: "social" },
         { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat_adult: "urgent", type: "descriptor" },
         { file: "I am hurt_6340", hindi: "मुझे चोट लगी है", cat_adult: "urgent", type: "descriptor" },
@@ -110,7 +109,6 @@
         { file: "I need a break_6397", hindi: "मुझे आराम चाहिए", cat_adult: "urgent", type: "social" },
         { file: "Hazards_6351", hindi: "खतरा", cat_adult: "urgent", type: "descriptor" },
         
-        // Category 2: Dining / भोजन समय
         { file: "Water_6707", hindi: "पानी", cat_adult: "dining", cat_child: "food", type: "noun" },
         { file: "Tea_6728", hindi: "चाय", cat_adult: "dining", type: "noun" },
         { file: "Milk_6708", hindi: "दूध", cat_adult: "dining", cat_child: "food", type: "noun" },
@@ -124,7 +122,6 @@
         { file: "Biscuits_6653", hindi: "बिस्कुट", cat_adult: "dining", cat_child: "food", type: "noun" },
         { file: "Juice_6709", hindi: "जूस", cat_adult: "dining", cat_child: "food", type: "noun" },
         
-        // Category 3: Personal Care / दिनचर्या
         { file: "Toilet_6247", hindi: "शौचालय जाना है", cat_adult: "care", type: "verb" },
         { file: "Bathing_6248", hindi: "नहाना है", cat_adult: "care", type: "verb" },
         { file: "Sleep_6251", hindi: "सोना है", cat_adult: "care", type: "verb" },
@@ -132,7 +129,6 @@
         { file: "Wash hands_6249", hindi: "हाथ धोना", cat_adult: "care", type: "verb" },
         { file: "Comb hair_6461", hindi: "कंघी करना", cat_adult: "care", type: "verb" },
         
-        // Category 4: Social / बातचीत
         { file: "Hello_6361", hindi: "नमस्ते", cat_adult: "social", type: "social" },
         { file: "Thank you_6392", hindi: "धन्यवाद", cat_adult: "social", type: "social" },
         { file: "Please_6391", hindi: "कृपया", cat_adult: "social", type: "social" },
@@ -142,14 +138,12 @@
         { file: "Aunt's birthday_7257", hindi: "जन्मदिन", cat_adult: "social", type: "social" },
         { file: "Sorry_6363", hindi: "क्षमा करें", cat_adult: "social", type: "social" },
         
-        // Category 5: Therapy / चिकित्सा
         { file: "Doctor_6307", hindi: "डॉक्टर", cat_adult: "therapy", type: "noun" },
         { file: "Nurse_6308", hindi: "नर्स", cat_adult: "therapy", type: "noun" },
         { file: "Medicine_6343", hindi: "दवा लेनी है", cat_adult: "therapy", type: "noun" },
         { file: "Exercises_6479", hindi: "कसरत", cat_adult: "therapy", type: "verb" },
         { file: "Speech therapy_6488", hindi: "स्पीच थेरेपी", cat_adult: "therapy", type: "verb" },
         
-        // Category 6: Home & Activities / घर पर गतिविधियां
         { file: "Air conditioner_6477", hindi: "एसी चलाएं", cat_adult: "home", type: "noun" },
         { file: "Fan_7025", hindi: "पंखा चलाएं", cat_adult: "home", type: "noun" },
         { file: "Light_6470", hindi: "लाइट", cat_adult: "home", type: "noun" },
@@ -157,13 +151,11 @@
         { file: "Activities_6270", hindi: "गतिविधियां", cat_adult: "home", type: "noun" },
         { file: "Arts and crafts_6850", hindi: "आर्ट और क्राफ्ट", cat_adult: "home", type: "noun" },
 
-        // --- PEDIATRIC RELEVANT TOYS STORES OVERRIDES ---
         { file: "Doll_6778", hindi: "गुड़िया", cat_child: "toys", type: "noun" },
         { file: "Car_7053", hindi: "गाड़ी", cat_child: "toys", type: "noun" },
         { file: "Ball_7118", hindi: "गेँद", cat_child: "toys", type: "noun" },
         { file: "Blocks_6782", hindi: "ब्लॉक्स", cat_child: "toys", type: "noun" },
 
-        // Pediatric Actions & Feelings
         { file: "Toilet_6247", hindi: "शौचालय जाना है", cat_child: "play", type: "verb" },
         { file: "Sleep_6251", hindi: "सोना है", cat_child: "play", type: "verb" },
         { file: "Activities_6270", hindi: "गतिविधियां", cat_child: "play", type: "noun" },
@@ -174,7 +166,7 @@
         { file: "I need a break_6397", hindi: "मुझे आराम चाहिए", cat_child: "feelings", type: "social" }
     ];
 
-    let masterCorpus = defaultMasterCorpus; // Hard lock registry connection to override cache blocks
+    let masterCorpus = defaultMasterCorpus;
 
     function initSystem() { renderSidebar(); filterDataCorpus(); }
 
@@ -252,28 +244,36 @@
     function clearSentence() { structuralSentence = []; document.getElementById('sentenceDisplay').innerHTML = ''; }
     function speakSentence() { if (structuralSentence.length === 0) return; executeAcousticFeedback(structuralSentence.join(' ')); }
 
+    // --- ASYNCHRONOUS CLINICAL VOICE-LOCK DRIVER ---
     function executeAcousticFeedback(phrase) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel(); 
+            
             let nativeText = phrase.replace(/[A-Za-z]/g, '').replace(/[\\/\\(\\)]/g, ' ').replace(/\\s+/g, ' ').trim();
             if (!nativeText) nativeText = phrase; 
+            
             const utterance = new SpeechSynthesisUtterance(nativeText); 
-            utterance.rate = (activePopulation === 'adult') ? 0.70 : 0.72; 
-            utterance.pitch = (activePopulation === 'adult') ? 1.0 : 1.25;
-            const findTrueHindiVoice = () => {
-                const voices = window.speechSynthesis.getVoices();
-                return voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN') || voices.find(v => v.name.includes('Google हिन्दी'));
-            };
-            const targetVoice = findTrueHindiVoice();
+            utterance.volume = 1.0;
+            utterance.rate = (activePopulation === 'adult') ? 0.65 : 0.72; 
+            utterance.pitch = (activePopulation === 'adult') ? 0.95 : 1.25;
+
+            const voices = window.speechSynthesis.getVoices();
+            // High-precision hierarchical native speech target parameters
+            let targetVoice = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN');
+            if (!targetVoice) targetVoice = voices.find(v => v.name.includes('Google हिन्दी'));
+            if (!targetVoice) targetVoice = voices.find(v => v.name.toLowerCase().includes('hindi'));
+
             if (targetVoice) utterance.voice = targetVoice; 
             window.speechSynthesis.speak(utterance);
         }
     }
+    
     function changePage(dir) { currentPage += dir; renderGridDisplay(); }
     function handleSearch() { currentPage = 1; filterDataCorpus(); }
     function setPopulation(pop) { activePopulation = pop; document.getElementById('pop-adult').classList.toggle('active', pop === 'adult'); document.getElementById('pop-child').classList.toggle('active', pop === 'child'); document.getElementById('brandSub').textContent = (pop === 'adult') ? "Context AAC" : "Child Development"; currentCategory = (pop === 'adult') ? 'urgent' : 'toys'; currentPage = 1; document.getElementById('searchInput').value = ''; initSystem(); }
     function setCommunicationTier(t) { activeCommunicationTier = t; document.getElementById('tier-basic').classList.toggle('active', t === 'basic'); document.getElementById('tier-advanced').classList.toggle('active', t === 'advanced'); document.getElementById('sentenceBar').style.display = (t === 'advanced') ? 'flex' : 'none'; clearSentence(); }
 
+    // Hard execution blocker: prevents asset runtime errors until browser text drivers sync up
     if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
         speechSynthesis.onvoiceschanged = () => { initSystem(); };
     }
