@@ -83,7 +83,6 @@
     let currentPage = 1; let structuralSentence = [];
     const itemsPerPage = 8; 
 
-    // Locked Child Core Vocabulary Matrix Layout
     const childCore = [
         { file: "Help_6241", hindi: "मदद चाहिए", type: "social" },
         { file: "Please give me_6394", hindi: "चाहिए", type: "verb" },
@@ -98,7 +97,6 @@
     };
     const childFringeCategories = { toys: { label: "खिलौने", icon: "🧸" }, food: { label: "खाना", icon: "🍎" }, play: { label: "क्रियाएं", icon: "🏃" }, feelings: { label: "भावनाएं", icon: "😄" } };
 
-    // Explicit Clinical Registry Setup Maps
     const defaultMasterCorpus = [
         { file: "Emergency_6338", hindi: "आपातकाल", cat_adult: "urgent", type: "social" },
         { file: "I am in pain_6353", hindi: "मुझे दर्द है", cat_adult: "urgent", type: "descriptor" },
@@ -244,7 +242,24 @@
     function clearSentence() { structuralSentence = []; document.getElementById('sentenceDisplay').innerHTML = ''; }
     function speakSentence() { if (structuralSentence.length === 0) return; executeAcousticFeedback(structuralSentence.join(' ')); }
 
-    // --- ASYNCHRONOUS CLINICAL VOICE-LOCK DRIVER ---
+    // --- ENHANCED HARDWARE VOICELOCK DRIVER ENGINE ---
+    let preferredHindiVoice = null;
+
+    function loadSystemVoices() {
+        if ('speechSynthesis' in window) {
+            const voices = window.speechSynthesis.getVoices();
+            // Force precise regional priority mapping
+            let target = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN');
+            if (!target) target = voices.find(v => v.name.includes('Google हिन्दी'));
+            if (!target) target = voices.find(v => v.name.toLowerCase().includes('hindi'));
+            
+            if (target) {
+                preferredHindiVoice = target;
+                console.log("Native Hindi Driver Lock Secured: " + target.name);
+            }
+        }
+    }
+
     function executeAcousticFeedback(phrase) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel(); 
@@ -254,16 +269,16 @@
             
             const utterance = new SpeechSynthesisUtterance(nativeText); 
             utterance.volume = 1.0;
+            utterance.lang = 'hi-IN'; // Force system driver language matching parameters
+            
+            // Adjust clinical pacing metrics
             utterance.rate = (activePopulation === 'adult') ? 0.65 : 0.72; 
             utterance.pitch = (activePopulation === 'adult') ? 0.95 : 1.25;
 
-            const voices = window.speechSynthesis.getVoices();
-            // High-precision hierarchical native speech target parameters
-            let targetVoice = voices.find(v => v.lang === 'hi-IN' || v.lang === 'hi_IN');
-            if (!targetVoice) targetVoice = voices.find(v => v.name.includes('Google हिन्दी'));
-            if (!targetVoice) targetVoice = voices.find(v => v.name.toLowerCase().includes('hindi'));
+            // Re-verify the selection line lock values right before execution
+            if (!preferredHindiVoice) loadSystemVoices();
+            if (preferredHindiVoice) utterance.voice = preferredHindiVoice;
 
-            if (targetVoice) utterance.voice = targetVoice; 
             window.speechSynthesis.speak(utterance);
         }
     }
@@ -273,11 +288,10 @@
     function setPopulation(pop) { activePopulation = pop; document.getElementById('pop-adult').classList.toggle('active', pop === 'adult'); document.getElementById('pop-child').classList.toggle('active', pop === 'child'); document.getElementById('brandSub').textContent = (pop === 'adult') ? "Context AAC" : "Child Development"; currentCategory = (pop === 'adult') ? 'urgent' : 'toys'; currentPage = 1; document.getElementById('searchInput').value = ''; initSystem(); }
     function setCommunicationTier(t) { activeCommunicationTier = t; document.getElementById('tier-basic').classList.toggle('active', t === 'basic'); document.getElementById('tier-advanced').classList.toggle('active', t === 'advanced'); document.getElementById('sentenceBar').style.display = (t === 'advanced') ? 'flex' : 'none'; clearSentence(); }
 
-    // Hard execution blocker: prevents asset runtime errors until browser text drivers sync up
     if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = () => { initSystem(); };
+        speechSynthesis.onvoiceschanged = () => { loadSystemVoices(); initSystem(); };
     }
-    window.onload = initSystem;
+    window.onload = () => { loadSystemVoices(); initSystem(); };
 </script>
 </body>
 </html>
